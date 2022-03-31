@@ -8,11 +8,12 @@ using System;
 
 namespace ExercisesLesson51
 {
-    class Exercises16
+    class Exercises7
     {
-        // phương thức tìm vị trí bắt đầu và độ dài dãy con tăng dài nhất
-        static void MaxIncrement(int[] arr, ref int startPos, ref int length)
+        // phương thức tìm độ dài dãy con tăng dài nhất
+        static int MaxIncrement(int[] arr)
         {
+            int length = -1; // độ dài của dãy con mặc định là -1
             int countElement = 0;
             for (int i = 0; i < arr.Length; i++)
             {
@@ -22,12 +23,11 @@ namespace ExercisesLesson51
                     if (countElement > length)
                     {
                         length = countElement;
-                        startPos = i - length + 1;
                     }
                     countElement = 0;
                 }
             }
-            length = length == -1 ? arr.Length : length;
+            return length == -1 ? arr.Length : length;
         }
 
         // phương thức hiển thị các phần tử của dãy con tăng dài nhất trong mảng
@@ -54,10 +54,31 @@ namespace ExercisesLesson51
                     arr[i] = int.Parse(elements[i]);
                 }
                 Console.WriteLine($"Test {test}:");
-                var startPos = 0;
-                var length = -1;
-                MaxIncrement(arr, ref startPos, ref length);
-                ShowElements(arr, startPos, length);
+                int maxLength = MaxIncrement(arr);
+                Console.WriteLine(maxLength);
+                FindPosition(arr, maxLength);
+            }
+        }
+
+        // phương thức tìm
+        static void FindPosition(int[] arr, int maxLength)
+        {
+            int countElement = 0;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                countElement++;
+                if (i + 1 < arr.Length && arr[i + 1] < arr[i])
+                {
+                    if (countElement == maxLength)
+                    {
+                        ShowElements(arr, i + 1 - maxLength, maxLength);
+                    }
+                    countElement = 0;
+                }
+                if(i == arr.Length - 1 && (countElement == arr.Length || countElement == maxLength))
+                {
+                    ShowElements(arr, 0, maxLength);
+                }
             }
         }
     }
