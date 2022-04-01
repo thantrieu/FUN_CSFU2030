@@ -1,12 +1,12 @@
 ﻿/// <summary>
 /// @author Branium Academy
 /// @see https://braniumacademy.net
-/// @version 2022.03.30
+/// @version 2022.04.01
 /// </summary>
 
 using System;
 
-namespace ExercisesLesson51
+namespace ExercisesLesson56
 {
     class Exercises7
     {
@@ -35,40 +35,45 @@ namespace ExercisesLesson51
         // phương thức tìm độ dài dãy con tăng dài nhất
         static int MaxIncrement(int[] arr)
         {
-            int length = -1;
-            int countElement = 0;
-            for (int i = 0; i < arr.Length; i++)
+            // delegate tìm độ dài max của tất cả các dãy con tăng
+            Func<int> findMaxLength = () =>
             {
-                countElement++;
-                if(i + 1 < arr.Length && arr[i + 1] < arr[i])
+                int length = -1;
+                int countElement = 0;
+                for (int i = 0; i < arr.Length; i++)
                 {
-                    if(countElement > length)
+                    countElement++;
+                    if (i + 1 < arr.Length && arr[i + 1] < arr[i])
+                    {
+                        if (countElement > length)
+                        {
+                            length = countElement;
+                        }
+                        countElement = 0;
+                    }
+                    if (i == arr.Length - 1 && length < countElement)
                     {
                         length = countElement;
                     }
-                    countElement = 0;
                 }
-                if(i == arr.Length - 1 && length < countElement)
-                {
-                    length = countElement;
-                }
-            }
-            return length == -1 ? arr.Length : length;
-        }
-
-        // phương thức hiển thị các phần tử trong dãy tăng dài nhất
-        static void ShowElements(int[] arr, int startPos, int numOfElement)
-        {
-            for (int i = startPos; i < startPos + numOfElement; i++)
-            {
-                Console.Write(arr[i] + " ");
-            }
-            Console.WriteLine();
+                return length == -1 ? arr.Length : length;
+            };
+            return findMaxLength();
         }
 
         // phương thức tìm tất cả các dãy tăng dài nhất
         static void FindPosition(int[] arr, int maxLength)
         {
+            // câu lệnh lambda hiển thị ra màn hình các phần tử của dãy tăng
+            Action<int[], int, int> showElement = (data, start, numOfElement) =>
+            {
+                for (int i = start; i < start + numOfElement; i++)
+                {
+                    Console.Write(arr[i] + " ");
+                }
+                Console.WriteLine();
+            };
+
             int startPos = 0;
             int countElement = 0;
             for (int i = 0; i < arr.Length; i++)
@@ -78,14 +83,14 @@ namespace ExercisesLesson51
                 {
                     if (countElement == maxLength)
                     {
-                        ShowElements(arr, i + 1 - maxLength, maxLength);
+                        showElement(arr, i + 1 - maxLength, maxLength);
                     }
                     countElement = 0;
                     startPos = i + 1;
                 }
                 if (i == arr.Length - 1 && (arr.Length == countElement || countElement == maxLength))
                 {
-                    ShowElements(arr, startPos, maxLength);
+                    showElement(arr, startPos, maxLength);
                 }
             }
         }
