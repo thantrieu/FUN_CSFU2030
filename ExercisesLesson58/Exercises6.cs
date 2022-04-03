@@ -161,7 +161,7 @@ namespace ExercisesLesson58
                 }
                 var student = students[i];
                 Console.WriteLine($"{student.id,-10:d}{student.fullName,-20:d}{student.address,-30:d}" +
-                    $"{student.mark.math,-10:d}{student.mark.english,-10:d}{student.mark.programming,-10:d}" +
+                    $"{student.mark.math,-10:#.##}{student.mark.english,-10:#.##}{student.mark.programming,-10:#.##}" +
                     $"{student.major,-15:d}");
             }
         }
@@ -174,7 +174,7 @@ namespace ExercisesLesson58
             };
             for (int i = 0; i < size - 1; i++)
             {
-                for (int j = size - 1; j >= 0; j++)
+                for (int j = size - 1; j > i; j--)
                 {
                     if (sum(students[j]) > sum(students[j - 1]))
                     {
@@ -190,7 +190,7 @@ namespace ExercisesLesson58
         {
             for (int i = 0; i < size - 1; i++)
             {
-                for (int j = size - 1; j >= 0; j++)
+                for (int j = size - 1; j > i; j--)
                 {
                     if (students[j].fullName.first.CompareTo(students[j - 1].fullName.first) < 0)
                     {
@@ -210,7 +210,7 @@ namespace ExercisesLesson58
             };
             for (int i = 0; i < size - 1; i++)
             {
-                for (int j = size - 1; j >= 0; j++)
+                for (int j = size - 1; j > i; j--)
                 {
                     var s1 = sum(students[j]);
                     var s2 = sum(students[j - 1]);
@@ -248,6 +248,10 @@ namespace ExercisesLesson58
             Student[] result = new Student[students.Length];
             for (int i = 0; i < students.Length; i++)
             {
+                if (students[i].id == null)
+                {
+                    break; // gặp đối tượng có id là null thì dừng lại
+                }
                 if (students[i].address.city.ToLower().CompareTo(city.ToLower()) == 0)
                 {
                     result[resultCount++] = students[i];
@@ -282,9 +286,9 @@ namespace ExercisesLesson58
         // sắp xếp danh sách thống kê theo từng tỉnh
         static void SortStatisticByCity(Pair[] statistic, int size)
         {
-            for (int i = 0; i < statistic.Length - 1; i++)
+            for (int i = 0; i < size - 1; i++)
             {
-                for (int j = statistic.Length - 1; j > i; j--)
+                for (int j = size - 1; j > i; j--)
                 {
                     if (statistic[j].amount > statistic[j - 1].amount)
                     {
@@ -299,9 +303,9 @@ namespace ExercisesLesson58
         // sắp xếp danh sách thống kê theo đầu điểm tiếng anh giảm dần
         static void SortStatisticByEnglishLevel(Pair[] statistic, int size)
         {
-            for (int i = 0; i < statistic.Length - 1; i++)
+            for (int i = 0; i < size - 1; i++)
             {
-                for (int j = statistic.Length - 1; j > i; j--)
+                for (int j = size - 1; j > i; j--)
                 {
                     if (statistic[j].englishMark > statistic[j - 1].englishMark)
                     {
@@ -351,7 +355,9 @@ namespace ExercisesLesson58
                 }
                 else
                 {
-                    statistic[statSize++].city = students[i].address.city;
+                    statistic[statSize].city = students[i].address.city;
+                    statistic[statSize].amount = 1;
+                    statSize++;
                 }
             }
             // sắp xếp
@@ -378,7 +384,9 @@ namespace ExercisesLesson58
                 }
                 else
                 {
-                    statistic[statSize++].englishMark = students[i].mark.english;
+                    statistic[statSize].englishMark = students[i].mark.english;
+                    statistic[statSize].amount = 1;
+                    statSize++;
                 }
             }
             // sắp xếp
@@ -418,6 +426,15 @@ namespace ExercisesLesson58
                 Console.WriteLine("2. Hien thi danh sach sinh vien.");
                 Console.WriteLine("3. Sap xep danh sach sinh vien theo tong diem giam dan.");
                 Console.WriteLine("4. Sap xep danh sach sinh vien theo ten tang dan.");
+                Console.WriteLine("5. Sap xep danh sach sinh vien theo ten + tong diem.");
+                Console.WriteLine("6. Tim sinh vien theo ten.");
+                Console.WriteLine("7. Tim sinh vien theo tinh.");
+                Console.WriteLine("8. Xoa sinh vien theo ma.");
+                Console.WriteLine("9. Liet ke so luong sinh vien theo tung tinh.");
+                Console.WriteLine("10. Liet ke so luong sinh vien theo dau diem tieng Anh.");
+                Console.WriteLine("11. Sua diem mon lap trinh C++.");
+                Console.WriteLine("12. Ket thuc chuong trinh.");
+                Console.WriteLine("Xin moi ban chon(1-12):");
                 choice = int.Parse(Console.ReadLine());
                 switch (choice)
                 {
@@ -567,7 +584,7 @@ namespace ExercisesLesson58
                         Console.WriteLine("==> Sai chuc nang. Vui long chon 1-12. <==");
                         break;
                 }
-            } while (choice != 0);
+            } while (choice != 12);
         }
     }
 }
