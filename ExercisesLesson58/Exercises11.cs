@@ -1,8 +1,8 @@
-﻿///<summary>
+﻿///<resultmary>
 ///<author>Branium Academy</author>
 ///<see cref="Trang chu" href="https://braniumacademy.net"/>
 ///<version>2022.04.03</version>
-///</summary>
+///</resultmary>
 
 using System;
 
@@ -29,54 +29,54 @@ namespace ExercisesLesson58
         // phương thức cộng hai phân số
         static Fraction Add(Fraction f1, Fraction f2)
         {
-            Fraction sum = new Fraction();
+            Fraction result = new Fraction();
             if (f1.denominator != f2.denominator)
             {
-                sum.denominator = f1.denominator * f2.denominator;
-                sum.numerator = f1.numerator * f2.denominator + f1.denominator * f2.numerator;
+                result.denominator = f1.denominator * f2.denominator;
+                result.numerator = f1.numerator * f2.denominator + f1.denominator * f2.numerator;
             }
             else
             {
-                sum.numerator = f1.numerator + f2.numerator;
-                sum.denominator = f1.denominator;
+                result.numerator = f1.numerator + f2.numerator;
+                result.denominator = f1.denominator;
             }
-            Simplify(ref sum);
-            return sum;
+            Simplify(ref result);
+            return result;
         }
         // phương thức trừ hai phân số
         static Fraction Sub(Fraction f1, Fraction f2)
         {
-            Fraction sum = new Fraction();
+            Fraction result = new Fraction();
             if (f1.denominator != f2.denominator)
             {
-                sum.denominator = f1.denominator * f2.denominator;
-                sum.numerator = f1.numerator * f2.denominator - f1.denominator * f2.numerator;
+                result.denominator = f1.denominator * f2.denominator;
+                result.numerator = f1.numerator * f2.denominator - f1.denominator * f2.numerator;
             }
             else
             {
-                sum.numerator = f1.numerator - f2.numerator;
-                sum.denominator = f1.denominator;
+                result.numerator = f1.numerator - f2.numerator;
+                result.denominator = f1.denominator;
             }
-            Simplify(ref sum);
-            return sum;
+            Simplify(ref result);
+            return result;
         }
         // phương thức nhân hai phân số
         static Fraction Mul(Fraction f1, Fraction f2)
         {
-            Fraction sum = new Fraction();
-            sum.denominator = f1.denominator * f2.denominator;
-            sum.numerator = f1.numerator * f2.numerator;
-            Simplify(ref sum);
-            return sum;
+            Fraction result = new Fraction();
+            result.denominator = f1.denominator * f2.denominator;
+            result.numerator = f1.numerator * f2.numerator;
+            Simplify(ref result);
+            return result;
         }
         // phương thức chia hai phân số
         static Fraction Div(Fraction f1, Fraction f2)
         {
-            Fraction sum = new Fraction();
-            sum.denominator = f1.denominator * f2.numerator;
-            sum.numerator = f1.numerator * f2.denominator;
-            Simplify(ref sum);
-            return sum;
+            Fraction result = new Fraction();
+            result.denominator = f1.denominator * f2.numerator;
+            result.numerator = f1.numerator * f2.denominator;
+            Simplify(ref result);
+            return result;
         }
         // phương thức rút gọn phân số
         static void Simplify(ref Fraction f)
