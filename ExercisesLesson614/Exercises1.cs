@@ -50,6 +50,7 @@ namespace CustomExtension
             }
             return builder.ToString();
         }
+
         // phương thức sắp xếp các từ theo thứ tự A-Z
         public static string SortASC(this string str)
         {
@@ -63,6 +64,7 @@ namespace CustomExtension
             }
             return builder.ToString();
         }
+
         // phương thức  sắp xếp các từ trong danh sách theo độ dài từ
         public static string SortByWordLength(this string str)
         {
@@ -76,6 +78,7 @@ namespace CustomExtension
             }
             return builder.ToString();
         }
+
         // phương thức tìm các từ bắt đầu bởi kí tự k nào đó
         public static string[] FindWordStartWith(this string str, char k)
         {
@@ -92,6 +95,7 @@ namespace CustomExtension
             }
             return result;
         }
+
         // phương thức tìm và trả về từ dài nhất trong câu
         public static string FindLongestWord(this string str)
         {
@@ -109,6 +113,7 @@ namespace CustomExtension
             }
             return result;
         }
+
         // phương thức tìm và trả về từ ngắn nhất trong câu
         public static string FindShortestWord(this string str)
         {
@@ -126,16 +131,44 @@ namespace CustomExtension
             }
             return result;
         }
+
         // phương thức đảo ngược các từ trong câu cho trước
+        public static string Reverse(this string str)
+        {
+            var words = str.Split(new char[] { ' ', '.', '!', ',' },
+                StringSplitOptions.RemoveEmptyEntries);
+            var result = new string[words.Length];
+            StringBuilder builder = new StringBuilder();
+            for (int i = words.Length - 1; i >= 0; i--)
+            {
+                builder.Append(words[i] + " ");
+            }
+            return builder.ToString();
+        }
 
         // phương thức chuyển đổi số nguyên n sang chuỗi nhị phân
+        public static string DecimalToBinary(this int number)
+        {
+            return Convert.ToString(number, 2);
+        }
 
         // phương thức chuyển đổi số nguyên n sang chuỗi kí tự ở hệ 16
+        public static string DecimalToHexa(this int number)
+        {
+            return Convert.ToString(number, 16);
+        }
 
         // phương thức chuyển đổi chuỗi nhị phân sang số ở hệ 10
+        public static int BinaryToDecimal(this string number)
+        {
+            return Convert.ToInt32(number, 2);
+        }
 
         // phương thức chuyển đổi chuỗi kí tự ở hệ 16 sang số ở hệ 10
-
+        public static int HexaToDecimal(this string number)
+        {
+            return Convert.ToInt32(number, 16);
+        }
     }
 }
 
@@ -183,6 +216,29 @@ namespace ExercisesLesson614
             Console.WriteLine("=============================================");
             // 8
             Console.WriteLine($"Tu ngan nhat trong cau: {input.FindShortestWord()}");
+            // 9
+            Console.WriteLine("=============================================");
+            Console.WriteLine("Chuoi ki tu sau khi dao nguoc cac tu: ");
+            Console.WriteLine(input.Reverse());
+            // 10
+            Console.WriteLine("=============================================");
+            Console.WriteLine("Chuoi ki tu sau khi dao nguoc cac tu: ");
+            // 11
+            Console.WriteLine("=============================================");
+            int x = 5000;
+            Console.WriteLine($"Chuyen so sang binary: {x} => {x.DecimalToBinary()}");
+            // 12
+            Console.WriteLine("=============================================");
+            int y = 5000;
+            Console.WriteLine($"Chuyen so sang hexa: {y} => {x.DecimalToHexa()}");
+            // 13
+            Console.WriteLine("=============================================");
+            string binary = "10110101001010100";
+            Console.WriteLine($"Chuyen binary sang int: {binary} => {binary.BinaryToDecimal()}");
+            //14
+            Console.WriteLine("=============================================");
+            string hexa = "6cadfe3";
+            Console.WriteLine($"Chuyen hexa sang int: {y} => {hexa.HexaToDecimal()}");
         }
 
         static void ShowElements(string[] data)
@@ -190,7 +246,7 @@ namespace ExercisesLesson614
             int index = 1;
             foreach (var word in data)
             {
-                if(word != null)
+                if (word != null)
                 {
                     Console.WriteLine($"{index++}: {word}");
                 }
