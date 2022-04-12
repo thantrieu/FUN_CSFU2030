@@ -1,7 +1,7 @@
 ﻿///<resultmary>
 ///<author>Branium Academy</author>
 ///<see cref="Trang chu" href="https://braniumacademy.net"/>
-///<version>2022.04.06</version>
+///<version>2022.04.09</version>
 ///</resultmary>
 
 using System;
@@ -10,7 +10,24 @@ namespace ExercisesLesson61
 {
     class BankAccount
     {
-        public string AccountNumber { get; set; } // số tài khoản
+        // số tài khoản 13 chữ số tự động tăng
+        public static long AutoId { get; set; } = 10000000000000;
+        public long AccountNumber
+        {
+            get => accNumber; // trả về số tài khoản
+            set // thiết lập giá trị cho số tài khoản
+            {
+                if (value < 10000000000000) // nếu truyền x < 10^13 vào => tự tạo số TK mới
+                {
+                    accNumber = AutoId++;
+                }
+                else // ngược lại, gán giá trị nhận được
+                {
+                    accNumber = value;
+                }
+            }
+        } // số tài khoản
+        public long accNumber;
         public string Owner { get; set; } // chủ tài khoản
         public long Balance { get; set; } // số dư
         public string Bank { get; set; } // ngân hàng phát hành
@@ -19,7 +36,7 @@ namespace ExercisesLesson61
 
         public BankAccount() { }
 
-        public BankAccount(string accNum, string owner,
+        public BankAccount(long accNum, string owner,
             long balance, string bank, string exp, int pin)
         {
             AccountNumber = accNum;
@@ -35,7 +52,6 @@ namespace ExercisesLesson61
             Console.WriteLine($"==> Thong tin so du tai khoan {AccountNumber}: ");
             Console.WriteLine($"So tien hien co trong tai khoan la: {Balance:n}d");
         }
-
         // rút tiền 
         public long Withdraw(long amount)
         {
@@ -49,7 +65,6 @@ namespace ExercisesLesson61
                 return 0;
             }
         }
-
         // nạp tiền vào tài khoản
         public long Deposit(long amount)
         {
@@ -60,7 +75,6 @@ namespace ExercisesLesson61
             }
             return 0;
         }
-
         // chuyển tiền đến ngân hàng khác
         public long Transfer(BankAccount other, long amount)
         {
@@ -74,7 +88,7 @@ namespace ExercisesLesson61
         }
     }
 
-    class Exercises4
+    class Exercises2
     {
         static void Main()
         {
@@ -102,7 +116,7 @@ namespace ExercisesLesson61
                     case 2:
                         if (size > 0)
                         {
-                            CheckBalance(accounts, size);
+                            CheckBalance(accounts);
                         }
                         else
                         {
@@ -185,11 +199,11 @@ namespace ExercisesLesson61
         }
 
         // phương thức tìm tài khoản theo số TK
-        static BankAccount FindAccountByAccNumber(BankAccount[] accounts, string accNum)
+        static BankAccount FindAccountByAccNumber(BankAccount[] accounts, long accNum)
         {
             foreach (var item in accounts)
             {
-                if (item != null && item.AccountNumber.CompareTo(accNum) == 0)
+                if (item != null && item.AccountNumber == accNum)
                 {
                     return item;
                 }
@@ -201,10 +215,10 @@ namespace ExercisesLesson61
         static void BankTransfer(BankAccount[] accounts)
         {
             Console.WriteLine("Nhap so tai khoan nguon: ");
-            var srcAccNum = Console.ReadLine();
+            var srcAccNum = long.Parse(Console.ReadLine());
             var srcAccount = FindAccountByAccNumber(accounts, srcAccNum);
             Console.WriteLine("Nhap so tai khoan dich: ");
-            var destAccNum = Console.ReadLine();
+            var destAccNum = long.Parse(Console.ReadLine());
             var destAccount = FindAccountByAccNumber(accounts, destAccNum);
             if (srcAccount == null)
             {
@@ -241,22 +255,20 @@ namespace ExercisesLesson61
         static void Withdraw(BankAccount[] accounts)
         {
             Console.WriteLine("Nhap so tai khoan: ");
-            var accNum = Console.ReadLine();
+            var accNum = long.Parse(Console.ReadLine());
             Console.WriteLine("Nhap so tien can rut: ");
             var amount = long.Parse(Console.ReadLine());
             Console.WriteLine("Nhap ma PIN: ");
             var pin = int.Parse(Console.ReadLine());
-            bool isSuccess = false;
             for (int i = 0; i < accounts.Length; i++)
             {
                 var item = accounts[i];
-                if (item != null && item.AccountNumber.CompareTo(accNum) == 0 &&
+                if (item != null && item.AccountNumber == accNum &&
                     pin == item.PIN)
                 {
                     var result = item.Withdraw(amount);
                     if (result > 0)
                     {
-                        isSuccess = true;
                         Console.WriteLine("==> Rut tien thanh cong! <==");
                         item.CheckBalance();
                     }
@@ -276,14 +288,14 @@ namespace ExercisesLesson61
         static void Deposit(BankAccount[] accounts)
         {
             Console.WriteLine("Nhap so tai khoan: ");
-            var accNum = Console.ReadLine();
+            var accNum = long.Parse(Console.ReadLine());
             Console.WriteLine("Nhap so tien can nap: ");
             var amount = long.Parse(Console.ReadLine());
             bool isSuccess = false;
             for (int i = 0; i < accounts.Length; i++)
             {
                 var item = accounts[i];
-                if (item != null && item.AccountNumber.CompareTo(accNum) == 0)
+                if (item != null && item.AccountNumber == accNum)
                 {
                     isSuccess = true;
                     item.Deposit(amount);
@@ -298,16 +310,16 @@ namespace ExercisesLesson61
         }
 
         // phương thức kiểm tra số dư
-        static void CheckBalance(BankAccount[] accounts, int size)
+        static void CheckBalance(BankAccount[] accounts)
         {
             Console.WriteLine("So tai khoan can kiem tra: ");
-            var accNum = Console.ReadLine();
+            var accNum = long.Parse(Console.ReadLine());
             bool isAccountExisted = false;
             foreach (var item in accounts)
             {
                 if (item != null)
                 {
-                    if (item.AccountNumber.CompareTo(accNum) == 0)
+                    if (item.AccountNumber == accNum)
                     {
                         item.CheckBalance();
                         isAccountExisted = true;
@@ -324,8 +336,6 @@ namespace ExercisesLesson61
         // phương thức nhập thông tin tài khoản
         static BankAccount CreateAccount()
         {
-            Console.WriteLine("So tai khoan: ");
-            var accNum = Console.ReadLine();
             Console.WriteLine("Ten tai khoan: ");
             var owner = Console.ReadLine().ToUpper();
             Console.WriteLine("So du: ");
@@ -336,7 +346,7 @@ namespace ExercisesLesson61
             var expiredDate = Console.ReadLine();
             Console.WriteLine("Ma PIN(6 so):");
             var pin = int.Parse(Console.ReadLine());
-            return new BankAccount(accNum, owner, balance, bank, expiredDate, pin);
+            return new BankAccount(0, owner, balance, bank, expiredDate, pin);
         }
     }
 }
