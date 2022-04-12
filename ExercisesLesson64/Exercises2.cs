@@ -1,7 +1,7 @@
 ﻿///<resultmary>
 ///<author>Branium Academy</author>
-///<see cref="Trang chu" href="https://braniumacademy.net"/>
-///<version>2022.04.09</version>
+///<see cref="Trang chủ" href="https://braniumacademy.net"/>
+///<version>2022.04.12</version>
 ///</resultmary>
 
 using System;
@@ -10,8 +10,13 @@ namespace ExercisesLesson61
 {
     class BankAccount
     {
+        // các trường dữ liệu để access modifier là private
         // số tài khoản 13 chữ số tự động tăng
-        public static long AutoId { get; set; } = 10000000000000;
+        private static long AutoId { get; set; } = 10000000000000;
+        // số tài khoản
+        public long accNumber;
+
+        // các thuộc tính public
         public long AccountNumber
         {
             get => accNumber; // trả về số tài khoản
@@ -26,8 +31,7 @@ namespace ExercisesLesson61
                     accNumber = value;
                 }
             }
-        } // số tài khoản
-        public long accNumber;
+        } 
         public string Owner { get; set; } // chủ tài khoản
         public long Balance { get; set; } // số dư
         public string Bank { get; set; } // ngân hàng phát hành
@@ -110,13 +114,13 @@ namespace ExercisesLesson61
                 switch (choice)
                 {
                     case 1:
-                        var acc = CreateAccount();
+                        var acc = BankAccountUtils.CreateAccount();
                         accounts[size++] = acc;
                         break;
                     case 2:
                         if (size > 0)
                         {
-                            CheckBalance(accounts);
+                            BankAccountUtils.CheckBalance(accounts);
                         }
                         else
                         {
@@ -126,7 +130,7 @@ namespace ExercisesLesson61
                     case 3:
                         if (size > 0)
                         {
-                            Deposit(accounts);
+                            BankAccountUtils.Deposit(accounts);
                         }
                         else
                         {
@@ -136,7 +140,7 @@ namespace ExercisesLesson61
                     case 4:
                         if (size > 0)
                         {
-                            Withdraw(accounts);
+                            BankAccountUtils.Withdraw(accounts);
                         }
                         else
                         {
@@ -146,7 +150,7 @@ namespace ExercisesLesson61
                     case 5:
                         if (size > 0)
                         {
-                            BankTransfer(accounts);
+                            BankAccountUtils.BankTransfer(accounts);
                         }
                         else
                         {
@@ -156,7 +160,7 @@ namespace ExercisesLesson61
                     case 6:
                         if (size > 0)
                         {
-                            ShowAccounts(accounts);
+                            BankAccountUtils.ShowAccounts(accounts);
                         }
                         else
                         {
@@ -172,9 +176,12 @@ namespace ExercisesLesson61
                 }
             } while (choice != 7);
         }
+    }
 
+    static class BankAccountUtils
+    {
         // phương thức hiển thị thông tin tài khoản trong danh sách
-        static void ShowAccounts(BankAccount[] accounts)
+        public static void ShowAccounts(BankAccount[] accounts)
         {
             var titleAccNum = "So TK";
             var titleOwner = "Chu TK";
@@ -200,7 +207,7 @@ namespace ExercisesLesson61
         }
 
         // phương thức tìm tài khoản theo số TK
-        static BankAccount FindAccountByAccNumber(BankAccount[] accounts, long accNum)
+        public static BankAccount FindAccountByAccNumber(BankAccount[] accounts, long accNum)
         {
             foreach (var item in accounts)
             {
@@ -213,7 +220,7 @@ namespace ExercisesLesson61
         }
 
         // phương thức chuyển tiền
-        static void BankTransfer(BankAccount[] accounts)
+        public static void BankTransfer(BankAccount[] accounts)
         {
             Console.WriteLine("Nhap so tai khoan nguon: ");
             var srcAccNum = long.Parse(Console.ReadLine());
@@ -253,7 +260,7 @@ namespace ExercisesLesson61
         }
 
         // phương thức rút tiền từ tài khoản
-        static void Withdraw(BankAccount[] accounts)
+        public static void Withdraw(BankAccount[] accounts)
         {
             Console.WriteLine("Nhap so tai khoan: ");
             var accNum = long.Parse(Console.ReadLine());
@@ -278,7 +285,8 @@ namespace ExercisesLesson61
                         Console.WriteLine("==> So tien can rut khong hop le. <==");
                     }
                     break;
-                } else
+                }
+                else
                 {
                     Console.WriteLine("==> Tai khoan khong ton tai hoac ma PIN khong dung. <==");
                 }
@@ -286,7 +294,7 @@ namespace ExercisesLesson61
         }
 
         // phương thức nạp tiền vào tài khoản
-        static void Deposit(BankAccount[] accounts)
+        public static void Deposit(BankAccount[] accounts)
         {
             Console.WriteLine("Nhap so tai khoan: ");
             var accNum = long.Parse(Console.ReadLine());
@@ -311,7 +319,7 @@ namespace ExercisesLesson61
         }
 
         // phương thức kiểm tra số dư
-        static void CheckBalance(BankAccount[] accounts)
+        public static void CheckBalance(BankAccount[] accounts)
         {
             Console.WriteLine("So tai khoan can kiem tra: ");
             var accNum = long.Parse(Console.ReadLine());
@@ -335,7 +343,7 @@ namespace ExercisesLesson61
         }
 
         // phương thức nhập thông tin tài khoản
-        static BankAccount CreateAccount()
+        public static BankAccount CreateAccount()
         {
             Console.WriteLine("Ten tai khoan: ");
             var owner = Console.ReadLine().ToUpper();

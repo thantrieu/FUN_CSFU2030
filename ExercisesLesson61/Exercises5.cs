@@ -201,6 +201,7 @@ namespace ExercisesLesson61
                         Console.WriteLine("==> Xin cam on va hen gap lai! <==");
                         break;
                     default:
+                        Console.WriteLine("==> Sai chuc nang. Vui long chon lai!");
                         break;
                 }
             } while (choice != 11);

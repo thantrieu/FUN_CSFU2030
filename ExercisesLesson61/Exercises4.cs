@@ -153,6 +153,7 @@ namespace ExercisesLesson61
                         Console.WriteLine("==> Chuong trinh ket thuc <==");
                         break;
                     default:
+                        Console.WriteLine("==> Sai chuc nang. Vui long chon lai!");
                         break;
                 }
             } while (choice != 7);
