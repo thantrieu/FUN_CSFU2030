@@ -129,7 +129,7 @@ namespace ExercisesLesson61
         {
             foreach (Employee employee in employees)
             {
-                if(employee != null)
+                if (employee != null)
                 {
                     employee.CalculateSalary();
                 }
@@ -143,11 +143,11 @@ namespace ExercisesLesson61
             {
                 for (int j = size - 1; j > i; j--)
                 {
-                    if(employees[j].Salary > employees[j-1].Salary)
+                    if (employees[j].Salary > employees[j - 1].Salary)
                     {
                         var tmp = employees[j];
-                        employees[j] = employees[j-1];
-                        employees[j-1] = tmp;
+                        employees[j] = employees[j - 1];
+                        employees[j - 1] = tmp;
                     }
                 }
             }
@@ -175,13 +175,14 @@ namespace ExercisesLesson61
         {
             foreach (var item in employees)
             {
-                if(item != null)
+                if (item != null)
                 {
-                    if(item.Id.CompareTo(id) == 0)
+                    if (item.Id.CompareTo(id) == 0)
                     {
                         return item;
                     }
-                } else
+                }
+                else
                 {
                     return null;
                 }
@@ -194,11 +195,11 @@ namespace ExercisesLesson61
         {
             for (int i = 0; i < employees.Length; i++)
             {
-                if(employees[i] != null)
+                if (employees[i] == null)
                 {
                     break; // nếu phần tử thứ i chưa update mà đã null thì thoát vòng lặp
                 } // lúc này không có nhân viên nào trùng với mã cho trước để update lương
-                if(employees[i].Id.CompareTo(id) == 0)
+                if (employees[i].Id.CompareTo(id) == 0)
                 {
                     employees[i].Salary = salaryToUpdate;
                     return true;
@@ -208,12 +209,11 @@ namespace ExercisesLesson61
         }
 
         // xóa nhân viên theo mã cho trước
-        // cập nhật mức lương theo mã nhân viên
         public static bool RemoveById(Employee[] employees, string id)
         {
             for (int i = 0; i < employees.Length; i++)
             {
-                if(employees[i] == null)
+                if (employees[i] == null)
                 {
                     break;
                 }
@@ -235,7 +235,9 @@ namespace ExercisesLesson61
     {
         static void Main()
         {
+            // cho phép hiển thị tiếng Việt trên màn hình output
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+
             int choice;
             Employee[] employees = new Employee[100];
             int size = 0;
@@ -251,7 +253,7 @@ namespace ExercisesLesson61
                 Console.WriteLine("7. Cập nhật mức lương cho nhân viên theo mã nhân viên.");
                 Console.WriteLine("8. Xóa bỏ nhân viên theo mã nhân viên.");
                 Console.WriteLine("9. Kết thúc chương trình.");
-                Console.WriteLine("Xin mời bạn chọn 1 chức năng: ");
+                Console.WriteLine("Xin mời bạn chọn 1 chức năng(nhập số 1-9): ");
                 choice = int.Parse(Console.ReadLine());
                 switch (choice)
                 {
@@ -350,11 +352,12 @@ namespace ExercisesLesson61
                             Console.WriteLine("Nhập mã nhân viên cần xóa: ");
                             string id = Console.ReadLine();
                             var result = EmployeeUtils.RemoveById(employees, id);
-                            if(result)
+                            if (result)
                             {
                                 Console.WriteLine("==> Xóa thành công! <==");
                                 size--;
-                            } else
+                            }
+                            else
                             {
                                 Console.WriteLine("==> Xóa thất bại! <==");
                             }
@@ -371,7 +374,7 @@ namespace ExercisesLesson61
                         Console.WriteLine("==> Sai chức năng. Vui lòng chọn lại!");
                         break;
                 }
-            } while (choice != 7);
+            } while (choice != 9);
         }
     }
 }
