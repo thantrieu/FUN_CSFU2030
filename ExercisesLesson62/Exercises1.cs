@@ -6,7 +6,7 @@
 
 using System;
 
-namespace ExercisesLesson61
+namespace ExercisesLesson63
 {
     /// <summary>
     /// Lớp mô tả thông tin nhân viên.

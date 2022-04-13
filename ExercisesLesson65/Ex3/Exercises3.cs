@@ -6,55 +6,8 @@
 
 using System;
 
-namespace ExercisesLesson64
+namespace ExercisesLesson65
 {
-    class Student
-    {
-        // các trường dữ liệu để access modifier là private
-        private static int AutoId { get; set; } = 1000;
-        private string id; // trường dữ liệu mô tả mã sinh viên
-
-        // các thuộc tính public
-        public string Id // thuộc tính mô tả thông tin mã sinh viên
-        {
-            get => id;
-            set
-            {
-                if (value == null)
-                {
-                    id = $"ST{AutoId++}";
-                }
-                else
-                {
-                    id = value;
-                }
-            }
-        }
-        public string FirstName { get; set; } // tên
-        public string LastName { get; set; } // họ
-        public string MidName { get; set; } // đệm
-        public string FullName { get => $"{LastName} {MidName} {FirstName}"; }
-        public string Address { get; set; } // địa chỉ
-        public float Gpa { get; set; } // điểm TB
-        public string Major { get; set; } // chuyên ngành
-
-        public Student()
-        {
-
-        }
-
-        public Student(string id, string first, string last,
-            string mid, string address, float gpa, string major)
-        {
-            Id = id;
-            FirstName = first;
-            LastName = last;
-            MidName = mid;
-            Gpa = gpa;
-            Address = address;
-            Major = major;
-        }
-    }
     static class StudentUtils
     {
         class Pair
@@ -125,7 +78,7 @@ namespace ExercisesLesson64
             {
                 if (students[i] != null && students[i].Id.CompareTo(id) == 0)
                 {
-                    Console.WriteLine("Nhap diem: ");
+                    Console.WriteLine("Nhập điểm: ");
                     var newGpa = float.Parse(Console.ReadLine());
                     students[i].Gpa = newGpa;
                     return true; // cập nhật thành công
@@ -296,11 +249,11 @@ namespace ExercisesLesson64
         // phương thức hiển thị thông tin sinh viên trong danh sách
         public static void ShowStudents(Student[] students)
         {
-            var titleId = "Ma SV";
-            var titleFullName = "Ho Ten";
-            var titleAddress = "Dia Chi";
-            var titleGpa = "Diem TB";
-            var titleMajor = "Chuyen Nganh";
+            var titleId = "Mã SV";
+            var titleFullName = "Họ Tên";
+            var titleAddress = "Địa Chỉ";
+            var titleGpa = "Điểm TB";
+            var titleMajor = "Chuyên Ngành";
             Console.WriteLine($"{titleId,-15:d}{titleFullName,-25:d}{titleAddress,-15:d}" +
                         $"{titleGpa,-10:d}{titleMajor,-20:d}");
             foreach (var item in students)
@@ -320,13 +273,13 @@ namespace ExercisesLesson64
         // phương thức tạo đối tượng sinh viên mới
         public static Student CreateStudent()
         {
-            Console.WriteLine("Ho va ten: ");
+            Console.WriteLine("Họ và tên: ");
             var fullName = Console.ReadLine().Split(' ');
-            Console.WriteLine("Dia chi(tinh, thanh pho):");
+            Console.WriteLine("Địa chỉ(tỉnh, thành phố):");
             var address = Console.ReadLine();
-            Console.WriteLine("Diem TB: ");
+            Console.WriteLine("Điểm TB: ");
             var gpa = float.Parse(Console.ReadLine());
-            Console.WriteLine("Chuyen nganh: ");
+            Console.WriteLine("Chuyên ngành: ");
             var major = Console.ReadLine();
             var midName = "";
             for (int i = 1; i < fullName.Length - 1; i++)
@@ -341,24 +294,29 @@ namespace ExercisesLesson64
     {
         static void Main()
         {
+            // cho phép hiển thị tiếng Việt trên màn hình output
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            // lưu ý màn hình console không hỗ trợ nhập liệu bằng tiếng Việt
+
             int choice;
             Student[] students = new Student[100];
             int size = 0;
             do
             {
-                Console.WriteLine("================== CAC CHUC NANG ==================");
-                Console.WriteLine("1. Them moi sinh vien vao danh sach.");
-                Console.WriteLine("2. Hien thi danh sach sinh vien.");
-                Console.WriteLine("3. Sap xep danh sach sinh vien theo diem giam dan.");
-                Console.WriteLine("4. Sap xep danh sach sinh vien theo ten tang dan.");
-                Console.WriteLine("5. Sap xep danh sach sinh vien theo diem va ten.");
-                Console.WriteLine("6. Tim sinh vien theo ten.");
-                Console.WriteLine("7. Tim sinh vien theo tinh.");
-                Console.WriteLine("8. Xoa sinh vien cho truoc khi biet ma sinh vien.");
-                Console.WriteLine("9. Liet ke so luong sinh vien theo tinh.");
-                Console.WriteLine("10. Sua diem TB cho sinh vien theo ma SV.");
-                Console.WriteLine("11. Ket thuc chuong trinh.");
-                Console.WriteLine("Xin moi ban chon chuc nang: ");
+                Console.WriteLine("++++++++++++++++++++ CÁC CHỨC NĂNG ++++++++++++++++++++");
+                Console.WriteLine("| 01. Thêm mới sinh viên vào danh sách.               |");
+                Console.WriteLine("| 02. Hiển thị danh sách sinh viên.                   |");
+                Console.WriteLine("| 03. Sắp xếp danh sách sinh viên theo điểm giảm dần. |");
+                Console.WriteLine("| 04. Sắp xếp danh sách sinh viên theo tên tăng dần.  |");
+                Console.WriteLine("| 05. Sắp xếp danh sách sinh viên theo điểm và tên.   |");
+                Console.WriteLine("| 06. Tìm sinh viên theo tên.                         |");
+                Console.WriteLine("| 07. Tìm sinh viên theo tỉnh.                        |");
+                Console.WriteLine("| 08. Xóa sinh viên cho trước khi biết mã sinh viên.  |");
+                Console.WriteLine("| 09. Liệt kê số lượng sinh viên theo tỉnh.           |");
+                Console.WriteLine("| 10. Sửa điểm TB cho sinh viên theo mã SV.           |");
+                Console.WriteLine("| 11. Kết thúc chương trình.                          |");
+                Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                Console.WriteLine("Xin mời bạn chọn chức năng(1-11): ");
                 choice = int.Parse(Console.ReadLine());
                 switch (choice)
                 {
@@ -373,7 +331,7 @@ namespace ExercisesLesson64
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach sinh vien trong <==");
+                            Console.WriteLine("==> Danh sách sinh viên trống <==");
                         }
                         break;
                     case 3:
@@ -383,7 +341,7 @@ namespace ExercisesLesson64
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach sinh vien trong <==");
+                            Console.WriteLine("==> Danh sách sinh viên trống <==");
                         }
                         break;
                     case 4:
@@ -393,7 +351,7 @@ namespace ExercisesLesson64
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach sinh vien trong <==");
+                            Console.WriteLine("==> Danh sách sinh viên trống <==");
                         }
                         break;
                     case 5:
@@ -403,69 +361,69 @@ namespace ExercisesLesson64
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach sinh vien trong <==");
+                            Console.WriteLine("==> Danh sách sinh viên trống <==");
                         }
                         break;
                     case 6:
                         if (size > 0)
                         {
-                            Console.WriteLine("Ten can tim: ");
+                            Console.WriteLine("Tên cần tìm: ");
                             var firstName = Console.ReadLine();
                             var result = StudentUtils.FindByName(students, firstName);
                             if (result[0] == null)
                             {
-                                Console.WriteLine("==> Khong co ket qua. <==");
+                                Console.WriteLine("==> Không có kết quả. <==");
                             }
                             else
                             {
-                                Console.WriteLine("==> Ket qua tim kiem: ");
+                                Console.WriteLine("==> Kết quả tìm kiếm: ");
                                 StudentUtils.ShowStudents(result);
                             }
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach sinh vien trong <==");
+                            Console.WriteLine("==> Danh sách sinh viên trống <==");
                         }
                         break;
                     case 7:
                         if (size > 0)
                         {
-                            Console.WriteLine("Ten thanh pho can tim: ");
+                            Console.WriteLine("Tên thành phố cần tìm: ");
                             var city = Console.ReadLine();
                             var result = StudentUtils.FindByAddress(students, city);
                             if (result[0] == null)
                             {
-                                Console.WriteLine("==> Khong co ket qua. <==");
+                                Console.WriteLine("==> Không có kết quả. <==");
                             }
                             else
                             {
-                                Console.WriteLine("==> Ket qua tim kiem: ");
+                                Console.WriteLine("==> Kết quả tìm kiếm: ");
                                 StudentUtils.ShowStudents(result);
                             }
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach sinh vien trong <==");
+                            Console.WriteLine("==> Danh sách sinh viên trống <==");
                         }
                         break;
                     case 8:
                         if (size > 0)
                         {
-                            Console.WriteLine("Ma sinh vien can xoa: ");
+                            Console.WriteLine("Mã sinh viên cần xóa: ");
                             var id = Console.ReadLine();
                             var result = StudentUtils.Remove(students, id);
                             if (!result)
                             {
-                                Console.WriteLine("==> Xoa that bai! <==");
+                                Console.WriteLine("==> Xóa thất bại! <==");
                             }
                             else
                             {
-                                Console.WriteLine("==> Xoa thanh cong! <==");
+                                Console.WriteLine("==> Xóa thành công! <==");
                             }
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach sinh vien trong <==");
+                            Console.WriteLine("==> Danh sách sinh viên trống <==");
                         }
                         break;
                     case 9:
@@ -475,34 +433,34 @@ namespace ExercisesLesson64
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach sinh vien trong <==");
+                            Console.WriteLine("==> Danh sách sinh viên trống <==");
                         }
                         break;
                     case 10:
                         if (size > 0)
                         {
-                            Console.WriteLine("Ma sinh vien can sua diem: ");
+                            Console.WriteLine("Mã sinh viên cần sửa điểm: ");
                             var id = Console.ReadLine();
                             var result = StudentUtils.EditGpa(students, id);
                             if (!result)
                             {
-                                Console.WriteLine("==> Cap nhat diem that bai. <==");
+                                Console.WriteLine("==> Cập nhật điểm thất bại. <==");
                             }
                             else
                             {
-                                Console.WriteLine("==> Cap nhat diem thanh cong! <==");
+                                Console.WriteLine("==> Cập nhật điểm thành công! <==");
                             }
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach sinh vien trong <==");
+                            Console.WriteLine("==> Danh sách sinh viên trống <==");
                         }
                         break;
                     case 11:
-                        Console.WriteLine("==> Xin cam on va hen gap lai! <==");
+                        Console.WriteLine("==> Xin cảm ơn và hẹn gặp lại! <==");
                         break;
                     default:
-                        Console.WriteLine("==> Sai chuc nang. Vui long chon lai!");
+                        Console.WriteLine("==> Sai chức năng. Vui lòng chọn lại!");
                         break;
                 }
             } while (choice != 11);

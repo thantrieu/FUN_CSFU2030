@@ -6,7 +6,7 @@
 
 using System;
 
-namespace ExercisesLesson61
+namespace ExercisesLesson63
 {
     class Student
     {

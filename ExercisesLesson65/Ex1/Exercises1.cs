@@ -6,79 +6,8 @@
 
 using System;
 
-namespace ExercisesLesson64
+namespace ExercisesLesson65
 {
-    /// <summary>
-    /// Lớp mô tả thông tin nhân viên.
-    /// </summary>
-    class Employee
-    {
-        // các trường dữ liệu để access modifier là private
-        private static int AutoId { get; set; } = 1000;
-        private string id; // mã nhân viên
-        public string Id
-        {
-            get => id;
-            set
-            {
-                if (value == null)
-                {
-                    id = "EMP" + AutoId++;
-                }
-                else
-                {
-                    id = value;
-                }
-            }
-        }
-        public string FullName { get; set; } // họ và tên
-        public string PhoneNumber { get; set; } // số điện thoại
-        public string Role { get; set; } // chức vụ
-        public float Salary { get; set; } // mức lương
-        public int WorkingDay { get; set; } // số ngày làm việc trong tháng
-        public float ReceivedSalary { get; set; } // lương thực lĩnh
-
-        // phương thức khởi tạo
-        public Employee() { }
-
-        public Employee(string id, string fullName, string phoneNumber,
-            string role, float salary, int workingDay)
-        {
-            Id = id;
-            FullName = fullName;
-            PhoneNumber = phoneNumber;
-            Role = role;
-            Salary = salary;
-            WorkingDay = workingDay;
-        }
-
-        // phương thức thể hiện hành động checkin
-        public void Checkin(string time)
-        {
-            Console.WriteLine($"Nhân viên {FullName} checkin lúc {time}.");
-        }
-
-        // phương thức thể hiện hành động checkout
-        public void Checkout(string time)
-        {
-            Console.WriteLine($"Nhân viên {FullName} checkout lúc {time}.");
-        }
-
-        // phương thức thể hiện hành động làm việc của nhân viên
-        public void DoWork(string task)
-        {
-            Console.WriteLine($"Nhân viên {FullName} đang làm nhiệm vụ {task}.");
-        }
-
-        // phương thức thể hiện hành động tính lương thực lĩnh của nhân viên
-        public float CalculateSalary()
-        {
-            float bonus = (WorkingDay >= 22) ? 0.2f * Salary : 0; // tiền thưởng
-            ReceivedSalary = Salary * WorkingDay / 22 + bonus; // lương thực lĩnh
-            return ReceivedSalary;
-        }
-    }
-
     static class EmployeeUtils
     {
         public static Employee CreateEmployee()
@@ -237,22 +166,24 @@ namespace ExercisesLesson64
         {
             // cho phép hiển thị tiếng Việt trên màn hình output
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+            // lưu ý màn hình console không hỗ trợ nhập liệu bằng tiếng Việt
 
             int choice;
             Employee[] employees = new Employee[100];
             int size = 0;
             do
             {
-                Console.WriteLine("======================= CÁC CHỨC NĂNG =======================");
-                Console.WriteLine("1. Thêm mới 1 nhân viên.");
-                Console.WriteLine("2. Hiển thị danh sách nhân viên ra màn hình.");
-                Console.WriteLine("3. Tính lương cho các nhân viên trong danh sách.");
-                Console.WriteLine("4. Sắp xếp danh sách nhân viên theo lương giảm dần.");
-                Console.WriteLine("5. Sắp xếp danh sách nhân viên theo số ngày đi làm giảm dần.");
-                Console.WriteLine("6. Tìm và hiển thị thông tin nhân viên theo mã nhân viên.");
-                Console.WriteLine("7. Cập nhật mức lương cho nhân viên theo mã nhân viên.");
-                Console.WriteLine("8. Xóa bỏ nhân viên theo mã nhân viên.");
-                Console.WriteLine("9. Kết thúc chương trình.");
+                Console.WriteLine("======================== CÁC CHỨC NĂNG =========================");
+                Console.WriteLine("= 1. Thêm mới 1 nhân viên vào danh sách.                       =");
+                Console.WriteLine("= 2. Hiển thị danh sách nhân viên ra màn hình.                 =");
+                Console.WriteLine("= 3. Tính lương cho các nhân viên trong danh sách.             =");
+                Console.WriteLine("= 4. Sắp xếp danh sách nhân viên theo lương giảm dần.          =");
+                Console.WriteLine("= 5. Sắp xếp danh sách nhân viên theo số ngày đi làm giảm dần. =");
+                Console.WriteLine("= 6. Tìm và hiển thị thông tin nhân viên theo mã nhân viên.    =");
+                Console.WriteLine("= 7. Cập nhật mức lương cho nhân viên theo mã nhân viên.       =");
+                Console.WriteLine("= 8. Xóa bỏ nhân viên theo mã nhân viên.                       =");
+                Console.WriteLine("= 9. Kết thúc chương trình.                                    =");
+                Console.WriteLine("================================================================");
                 Console.WriteLine("Xin mời bạn chọn 1 chức năng(nhập số 1-9): ");
                 choice = int.Parse(Console.ReadLine());
                 switch (choice)

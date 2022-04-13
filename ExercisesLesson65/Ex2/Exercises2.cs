@@ -6,111 +6,33 @@
 
 using System;
 
-namespace ExercisesLesson64
+namespace ExercisesLesson65
 {
-    class BankAccount
-    {
-        // các trường dữ liệu để access modifier là private
-        // số tài khoản 13 chữ số tự động tăng
-        private static long AutoId { get; set; } = 10000000000000;
-        // số tài khoản
-        public long accNumber;
-
-        // các thuộc tính public
-        public long AccountNumber
-        {
-            get => accNumber; // trả về số tài khoản
-            set // thiết lập giá trị cho số tài khoản
-            {
-                if (value < 10000000000000) // nếu truyền x < 10^13 vào => tự tạo số TK mới
-                {
-                    accNumber = AutoId++;
-                }
-                else // ngược lại, gán giá trị nhận được
-                {
-                    accNumber = value;
-                }
-            }
-        } 
-        public string Owner { get; set; } // chủ tài khoản
-        public long Balance { get; set; } // số dư
-        public string Bank { get; set; } // ngân hàng phát hành
-        public string ExpiredDate { get; set; } // ngày hết hạn
-        public int PIN { get; set; } // mã pin
-
-        public BankAccount() { }
-
-        public BankAccount(long accNum, string owner,
-            long balance, string bank, string exp, int pin)
-        {
-            AccountNumber = accNum;
-            Owner = owner;
-            Balance = balance;
-            Bank = bank;
-            ExpiredDate = exp;
-            PIN = pin;
-        }
-
-        public void CheckBalance()
-        {
-            Console.WriteLine($"==> Thong tin so du tai khoan {AccountNumber}: ");
-            Console.WriteLine($"So tien hien co trong tai khoan la: {Balance:n}d");
-        }
-        // rút tiền 
-        public long Withdraw(long amount)
-        {
-            if (amount < Balance - 50000)
-            {
-                Balance -= amount;
-                return amount;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        // nạp tiền vào tài khoản
-        public long Deposit(long amount)
-        {
-            if (amount > 0)
-            {
-                Balance += amount;
-                return amount;
-            }
-            return 0;
-        }
-        // chuyển tiền đến ngân hàng khác
-        public long Transfer(BankAccount other, long amount)
-        {
-            if (other != null && amount < Balance - 50000)
-            {
-                other.Balance += amount;
-                Balance -= amount;
-                return amount;
-            }
-            return 0;
-        }
-    }
-
     class Exercises2
     {
         static void Main()
         {
+            // cho phép hiển thị tiếng Việt trên màn hình output
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            // lưu ý màn hình console không hỗ trợ nhập liệu bằng tiếng Việt
+
             int choice;
             BankAccount[] accounts = new BankAccount[100];
             int size = 0;
             do
             {
-                Console.WriteLine("================== CAC CHUC NANG ==================");
-                Console.WriteLine("1. Tao moi tai khoan.");
-                Console.WriteLine("2. Kiem tra so du cua tai khoan.");
-                Console.WriteLine("3. Nap tien vao tai khoan.");
-                Console.WriteLine("4. Rut tien khoi tai khoan.");
-                Console.WriteLine("5. Chuyen tien sang tai khoan khac.");
-                Console.WriteLine("6. Hien thi danh sach tai khoan ra man hinh.");
-                Console.WriteLine("7. Ket thuc chuong trinh.");
-                Console.WriteLine("Xin moi ban chon chuc nang: ");
+                Console.WriteLine("************ CÁC CHỨC NĂNG ************");
+                Console.WriteLine("* 1. Tạo mới tài khoản.               *");
+                Console.WriteLine("* 2. Kiểm tra số dư của tài khoản.    *");
+                Console.WriteLine("* 3. Nạp tiền vào tài khoản.          *");
+                Console.WriteLine("* 4. Rút tiền khỏi tài khoản.         *");
+                Console.WriteLine("* 5. Chuyển tiền sang tài khoản khác. *");
+                Console.WriteLine("* 6. Hiển thị danh sách tài khoản.    *");
+                Console.WriteLine("* 7. Kết thúc chương trình.           *");
+                Console.WriteLine("***************************************");
+                Console.WriteLine("Xin mời bạn chọn chức năng: ");
                 choice = int.Parse(Console.ReadLine());
+
                 switch (choice)
                 {
                     case 1:
@@ -124,7 +46,7 @@ namespace ExercisesLesson64
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach tai khoan trong <==");
+                            Console.WriteLine("==> Danh sách tài khoản rỗng <==");
                         }
                         break;
                     case 3:
@@ -134,7 +56,7 @@ namespace ExercisesLesson64
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach tai khoan trong <==");
+                            Console.WriteLine("==> Danh sách tài khoản rỗng <==");
                         }
                         break;
                     case 4:
@@ -144,7 +66,7 @@ namespace ExercisesLesson64
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach tai khoan trong <==");
+                            Console.WriteLine("==> Danh sách tài khoản rỗng <==");
                         }
                         break;
                     case 5:
@@ -154,7 +76,7 @@ namespace ExercisesLesson64
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach tai khoan trong <==");
+                            Console.WriteLine("==> Danh sách tài khoản rỗng <==");
                         }
                         break;
                     case 6:
@@ -164,14 +86,14 @@ namespace ExercisesLesson64
                         }
                         else
                         {
-                            Console.WriteLine("==> Danh sach tai khoan trong <==");
+                            Console.WriteLine("==> Danh sách tài khoản rỗng <==");
                         }
                         break;
                     case 7:
-                        Console.WriteLine("==> Chuong trinh ket thuc <==");
+                        Console.WriteLine("==> Chương trình kết thúc <==");
                         break;
                     default:
-                        Console.WriteLine("==> Sai chuc nang. Vui long chon lai!");
+                        Console.WriteLine("==> Sai chức năng. Vui lòng chọn lại! <==");
                         break;
                 }
             } while (choice != 7);
@@ -180,15 +102,15 @@ namespace ExercisesLesson64
 
     static class BankAccountUtils
     {
-        // phương thức hiển thị thông tin tài khoản trong danh sách
+        // phương thức hiển thị thông tin tài khoản rỗng danh sách
         public static void ShowAccounts(BankAccount[] accounts)
         {
-            var titleAccNum = "So TK";
-            var titleOwner = "Chu TK";
-            var titleBalance = "So Du";
-            var titleBankName = "Ngan Hang";
-            var titleExpiredDate = "Het Han";
-            var titlePIN = "Ma PIN";
+            var titleAccNum = "Số TK";
+            var titleOwner = "Chủ TK";
+            var titleBalance = "Số Dư";
+            var titleBankName = "Ngân Hàng";
+            var titleExpiredDate = "Hết Hạn";
+            var titlePIN = "Mã PIN";
             Console.WriteLine($"{titleAccNum,-15:d}{titleOwner,-20:d}{titleBalance,-15:d}" +
                         $"{titleBankName,-15:d}{titleExpiredDate,-15:d}{titlePIN,-10:d}");
             foreach (var item in accounts)
@@ -222,51 +144,51 @@ namespace ExercisesLesson64
         // phương thức chuyển tiền
         public static void BankTransfer(BankAccount[] accounts)
         {
-            Console.WriteLine("Nhap so tai khoan nguon: ");
+            Console.WriteLine("Nhập số tài khoản nguồn: ");
             var srcAccNum = long.Parse(Console.ReadLine());
             var srcAccount = FindAccountByAccNumber(accounts, srcAccNum);
-            Console.WriteLine("Nhap so tai khoan dich: ");
+            Console.WriteLine("Nhập số tài khoản đích: ");
             var destAccNum = long.Parse(Console.ReadLine());
             var destAccount = FindAccountByAccNumber(accounts, destAccNum);
             if (srcAccount == null)
             {
-                Console.WriteLine("==> Tai khoan nguon khong ton tai. <==");
+                Console.WriteLine("==> Tài khoản nguồn không tồn tại. <==");
                 return;
             }
             if (destAccount == null)
             {
-                Console.WriteLine("==> Tai khoan dich khong ton tai. <==");
+                Console.WriteLine("==> Tài khoản đích không tồn tại. <==");
             }
-            Console.WriteLine("Nhap so tien can chuyen: ");
+            Console.WriteLine("Nhập số tiền cần chuyển: ");
             var amount = long.Parse(Console.ReadLine());
-            Console.WriteLine("Nhap ma PIN tai khoan nguon: ");
+            Console.WriteLine("Nhập mã PIN tài khoản nguồn: ");
             var pin = int.Parse(Console.ReadLine());
             if (srcAccount.PIN == pin)
             {
                 var result = srcAccount.Transfer(destAccount, amount);
                 if (result > 0)
                 {
-                    Console.WriteLine("==> Chuyen tien thanh cong! <==");
+                    Console.WriteLine("==> Chuyển tiền thành công! <==");
                 }
                 else
                 {
-                    Console.WriteLine("==> So tien can chuyen khong hop le. <==");
+                    Console.WriteLine("==> Số tiền cần chuyển không hợp lệ. <==");
                 }
             }
             else
             {
-                Console.WriteLine("==> Ma PIN khong dung <==");
+                Console.WriteLine("==> Ma PIN không dung <==");
             }
         }
 
         // phương thức rút tiền từ tài khoản
         public static void Withdraw(BankAccount[] accounts)
         {
-            Console.WriteLine("Nhap so tai khoan: ");
+            Console.WriteLine("Nhập số tài khoản: ");
             var accNum = long.Parse(Console.ReadLine());
-            Console.WriteLine("Nhap so tien can rut: ");
+            Console.WriteLine("Nhập số tiền cần rút: ");
             var amount = long.Parse(Console.ReadLine());
-            Console.WriteLine("Nhap ma PIN: ");
+            Console.WriteLine("Nhập mã PIN: ");
             var pin = int.Parse(Console.ReadLine());
             for (int i = 0; i < accounts.Length; i++)
             {
@@ -277,18 +199,18 @@ namespace ExercisesLesson64
                     var result = item.Withdraw(amount);
                     if (result > 0)
                     {
-                        Console.WriteLine("==> Rut tien thanh cong! <==");
+                        Console.WriteLine("==> Rút tiền thành công! <==");
                         item.CheckBalance();
                     }
                     else
                     {
-                        Console.WriteLine("==> So tien can rut khong hop le. <==");
+                        Console.WriteLine("==> Số tiền cần rút không hợp lệ. <==");
                     }
                     break;
                 }
                 else
                 {
-                    Console.WriteLine("==> Tai khoan khong ton tai hoac ma PIN khong dung. <==");
+                    Console.WriteLine("==> Tài khoản không tồn tại hoặc mã PIN không đúng. <==");
                 }
             }
         }
@@ -296,9 +218,9 @@ namespace ExercisesLesson64
         // phương thức nạp tiền vào tài khoản
         public static void Deposit(BankAccount[] accounts)
         {
-            Console.WriteLine("Nhap so tai khoan: ");
+            Console.WriteLine("Nhập số tài khoản: ");
             var accNum = long.Parse(Console.ReadLine());
-            Console.WriteLine("Nhap so tien can nap: ");
+            Console.WriteLine("Nhập số tiền cần nạp: ");
             var amount = long.Parse(Console.ReadLine());
             bool isSuccess = false;
             for (int i = 0; i < accounts.Length; i++)
@@ -308,20 +230,20 @@ namespace ExercisesLesson64
                 {
                     isSuccess = true;
                     item.Deposit(amount);
-                    Console.WriteLine("==> Nap tien thanh cong! <==");
+                    Console.WriteLine("==> Nạp tiền thành công! <==");
                     break;
                 }
             }
             if (!isSuccess)
             {
-                Console.WriteLine("==> Tai khoan can nap tien khong ton tai. <==");
+                Console.WriteLine("==> Tài khoản cần nạp tiền không tồn tại. <==");
             }
         }
 
         // phương thức kiểm tra số dư
         public static void CheckBalance(BankAccount[] accounts)
         {
-            Console.WriteLine("So tai khoan can kiem tra: ");
+            Console.WriteLine("Số tài khoản cần kiểm tra: ");
             var accNum = long.Parse(Console.ReadLine());
             bool isAccountExisted = false;
             foreach (var item in accounts)
@@ -338,22 +260,22 @@ namespace ExercisesLesson64
             }
             if (!isAccountExisted)
             {
-                Console.WriteLine("==> So tai khoan tren khong ton tai. <==");
+                Console.WriteLine("==> Số tài khoản trên không tồn tại. <==");
             }
         }
 
         // phương thức nhập thông tin tài khoản
         public static BankAccount CreateAccount()
         {
-            Console.WriteLine("Ten tai khoan: ");
+            Console.WriteLine("Tên tài khoản: ");
             var owner = Console.ReadLine().ToUpper();
-            Console.WriteLine("So du: ");
+            Console.WriteLine("Số dư: ");
             var balance = long.Parse(Console.ReadLine());
-            Console.WriteLine("Ngan hang phat hanh: ");
+            Console.WriteLine("Ngân hàng phát hành: ");
             var bank = Console.ReadLine();
-            Console.WriteLine("Ngay het han: ");
+            Console.WriteLine("Ngày hết hạn: ");
             var expiredDate = Console.ReadLine();
-            Console.WriteLine("Ma PIN(6 so):");
+            Console.WriteLine("Mã PIN(6 số):");
             var pin = int.Parse(Console.ReadLine());
             return new BankAccount(0, owner, balance, bank, expiredDate, pin);
         }

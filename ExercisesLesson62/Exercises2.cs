@@ -6,7 +6,7 @@
 
 using System;
 
-namespace ExercisesLesson61
+namespace ExercisesLesson62
 {
     class BankAccount
     {
