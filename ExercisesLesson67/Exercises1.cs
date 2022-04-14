@@ -113,13 +113,13 @@ namespace ExercisesLesson67
             var result = new Student[students.Length];
             foreach (var item in students)
             {
-                if (item != null && item.Major.CompareTo(major) == 0)
-                {
-                    result[resultSize++] = item;
-                }
-                else
+                if (item == null)
                 {
                     break;
+                }
+                if (item.Major.CompareTo(major) == 0)
+                {
+                    result[resultSize++] = item;
                 }
             }
             return result;

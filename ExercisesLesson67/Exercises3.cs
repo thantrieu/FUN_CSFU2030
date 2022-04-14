@@ -6,8 +6,8 @@ namespace ExercisesLesson67
     {
         static void Main()
         {
-            Employee[] students = new Employee[100];
-            int studentSize = 0;
+            Employee[] employees = new Employee[100];
+            int size = 0;
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             int choice;
             do
@@ -27,12 +27,12 @@ namespace ExercisesLesson67
                 {
                     case 1:
                         var employee = CreateEmployee();
-                        students[studentSize++] = student;
+                        employees[size++] = employee;
                         break;
                     case 2:
-                        if (studentSize > 0)
+                        if (size > 0)
                         {
-                            ShowStudents(students);
+                            ShowEmployees(employees);
                         }
                         else
                         {
@@ -40,11 +40,11 @@ namespace ExercisesLesson67
                         }
                         break;
                     case 3:
-                        if (studentSize > 0)
+                        if (size > 0)
                         {
-                            Console.WriteLine("==> Danh sách nhân viên sau khi sắp xếp <==");
-                            Sort(students, studentSize);
-                            ShowStudents(students);
+                            Console.WriteLine("==> Danh sách nhân viên sau khi sắp xếp theo lương giảm dần <==");
+                            SortBySalary(employees, size);
+                            ShowEmployees(employees);
                         }
                         else
                         {
@@ -52,20 +52,11 @@ namespace ExercisesLesson67
                         }
                         break;
                     case 4:
-                        if (studentSize > 0)
+                        if (size > 0)
                         {
-                            Console.WriteLine("Nhập chuyên ngành cần tìm: ");
-                            var major = Console.ReadLine();
-                            var result = FindByMajor(students, major);
-                            if (result[0] == null)
-                            {
-                                Console.WriteLine("==> Không có kết quả tìm kiếm <==");
-                            }
-                            else
-                            {
-                                Console.WriteLine("==> Kết quả tìm kiếm: <==");
-                                ShowStudents(result);
-                            }
+                            Console.WriteLine("==> Danh sách nhân viên sau khi sắp xếp theo mức phạt giảm dần <==");
+                            SortByFine(employees, size);
+                            ShowEmployees(employees);
                         }
                         else
                         {
@@ -73,15 +64,48 @@ namespace ExercisesLesson67
                         }
                         break;
                     case 5:
-                        if (studentSize > 0)
+                        if (size > 0)
+                        {
+                            Console.WriteLine("==> Danh sách nhân viên sau khi sắp xếp theo lương thực lĩnh giảm dần <==");
+                            SortByReceivedSalary(employees, size);
+                            ShowEmployees(employees);
+                        }
+                        else
+                        {
+                            Console.WriteLine("==> Danh sách nhân viên rỗng. <==");
+                        }
+                        break;
+                    case 6:
+                        if (size > 0)
+                        {
+                            Console.WriteLine("Nhập mã nhân viên cần tìm: ");
+                            var id = Console.ReadLine();
+                            var result = FindById(employees, id!);
+                            if (result == null)
+                            {
+                                Console.WriteLine("==> Không có kết quả tìm kiếm <==");
+                            }
+                            else
+                            {
+                                Console.WriteLine("==> Kết quả tìm kiếm: <==");
+                                ShowEmployees(new Employee[] { result });
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("==> Danh sách nhân viên rỗng. <==");
+                        }
+                        break;
+                    case 7:
+                        if (size > 0)
                         {
                             Console.WriteLine("Nhập mã nhân viên cần xóa: ");
                             var id = Console.ReadLine();
-                            var result = Remove(students, id);
+                            var result = Remove(employees, id);
                             if (result)
                             {
                                 Console.WriteLine("==> Xóa thành công. <==");
-                                studentSize--;
+                                size--;
                             }
                             else
                             {
@@ -93,12 +117,6 @@ namespace ExercisesLesson67
                             Console.WriteLine("==> Danh sách nhân viên rỗng. <==");
                         }
                         break;
-                    case 6:
-
-                        break;
-                    case 7:
-
-                        break;
                     case 8:
                         Console.WriteLine("==> Chương trình kết thúc. <==");
                         break;
@@ -108,41 +126,35 @@ namespace ExercisesLesson67
                 }
             } while (choice != 8);
         }
-        // phương thức tìm record theo chuyên ngành
-        static Employee[] FindByMajor(Employee[] students, string major)
+        // phương thức tìm record theo mã nhân viên
+        static Employee FindById(Employee[] employees, string id)
         {
-            var resultSize = 0;
-            var result = new Employee[students.Length];
-            foreach (var item in students)
+            foreach (var item in employees)
             {
-                if (item != null && item.Major.CompareTo(major) == 0)
+                if (item != null && item.Id.CompareTo(id) == 0)
                 {
-                    result[resultSize++] = item;
-                }
-                else
-                {
-                    break;
+                    return item;
                 }
             }
-            return result;
+            return null;
         }
 
         // phương thức xóa record theo mã nhân viên
-        static bool Remove(Employee[] students, string id)
+        static bool Remove(Employee[] employees, string id)
         {
-            for (int i = 0; i < students.Length; i++)
+            for (int i = 0; i < employees.Length; i++)
             {
-                if (students[i] == null)
+                if (employees[i] == null)
                 {
                     break;
                 }
                 // nếu tìm thấy nhân viên với mã cần xóa, tiến hành
                 // dồn tất cả các phần tử bên tay phải vị trí i sang trái 1 vị trí
-                if (students[i].Id.CompareTo(id) == 0)
+                if (employees[i].Id.CompareTo(id) == 0)
                 {
-                    for (int j = i; j < students.Length - 1; j++)
+                    for (int j = i; j < employees.Length - 1; j++)
                     {
-                        students[j] = students[j + 1];
+                        employees[j] = employees[j + 1];
                     }
                     return true; // xóa thành công
                 }
@@ -150,18 +162,52 @@ namespace ExercisesLesson67
             return false;
         }
 
-        // phương thức sắp xếp danh sách các record theo điểm giảm dần
-        static void Sort(Employee[] students, int size)
+        // phương thức sắp xếp danh sách các record theo lương giảm dần
+        static void SortBySalary(Employee[] employees, int size)
         {
             for (int i = 0; i < size; i++)
             {
                 for (int j = size - 1; j > i; j--)
                 {
-                    if (students[j].Gpa > students[j - 1].Gpa)
+                    if (employees[j].Salary > employees[j - 1].Salary)
                     {
-                        var tmp = students[j];
-                        students[j] = students[j - 1];
-                        students[j - 1] = tmp;
+                        var tmp = employees[j];
+                        employees[j] = employees[j - 1];
+                        employees[j - 1] = tmp;
+                    }
+                }
+            }
+        }
+
+        // phương thức sắp xếp danh sách các record theo mức phạt giảm dần
+        static void SortByFine(Employee[] employees, int size)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = size - 1; j > i; j--)
+                {
+                    if (employees[j].Fine > employees[j - 1].Fine)
+                    {
+                        var tmp = employees[j];
+                        employees[j] = employees[j - 1];
+                        employees[j - 1] = tmp;
+                    }
+                }
+            }
+        }
+
+        // phương thức sắp xếp danh sách các record theo tổng lương giảm dần
+        static void SortByReceivedSalary(Employee[] employees, int size)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = size - 1; j > i; j--)
+                {
+                    if (employees[j].RealSalary > employees[j - 1].RealSalary)
+                    {
+                        var tmp = employees[j];
+                        employees[j] = employees[j - 1];
+                        employees[j - 1] = tmp;
                     }
                 }
             }
@@ -185,19 +231,26 @@ namespace ExercisesLesson67
         }
 
         // phương thức hiển thị thông tin nhân viên
-        static void ShowStudents(Employee[] students)
+        static void ShowEmployees(Employee[] employees)
         {
-            var titleId = "Mã SV";
+            var titleId = "Mã NV";
             var titleName = "Họ và tên";
-            var titleGpa = "Điểm TB";
-            var titleMajor = "Chuyên ngành";
-            Console.WriteLine($"{titleId,-15:d}{titleName,-25:d}{titleGpa,-12:d}{titleMajor,-25:d}");
-            foreach (var item in students)
+            var titleWorkingDay = "Số ngày LV";
+            var titleSalary = "Lương";
+            var titleLate = "Đi làm muộn";
+            var titleFine = "Tiền phạt";
+            var titleReSalary = "Lương thực lĩnh";
+
+            Console.WriteLine($"{titleId,-12:d}{titleName,-25:d}{titleWorkingDay,-12:d}" +
+                $"{titleSalary,-12:d}{titleLate,-15:d}{titleFine,-12:d}{titleReSalary,-12:d}");
+            foreach (var item in employees)
             {
                 if (item != null)
                 {
-                    Console.WriteLine($"{item.Id,-15:d}{item.FullName,-25:d}" +
-                        $"{Math.Round(item.Gpa, 2) + "",-12:d}{item.Major,-25:d}");
+                    Console.WriteLine($"{item.Id,-12:d}{item.FullName,-25:d}" +
+                        $"{Math.Round(item.WorkingDay, 2) + "",-12:d}" +
+                        $"{Math.Round(item.Salary, 2) + "",-12:d}{item.LateDay,-15:d}" +
+                        $"{Math.Round(item.Fine, 2) + "",-12:d}{Math.Round(item.RealSalary, 2) + "",-12:d}");
                 }
             }
         }
