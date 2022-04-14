@@ -11,13 +11,13 @@ namespace ExercisesLesson51
     class Exercises12
     {
         // phương thức sắp xếp các phần tử mảng tăng dần
-        static void SortDESC(int[] arr)
+        static void Sort(int[] arr)
         {
             for (int i = 0; i < arr.Length - 1; i++)
             {
                 for (int j = arr.Length - 1; j > i; j--)
                 {
-                    if(arr[j] > arr[j - 1])
+                    if(arr[j] < arr[j - 1])
                     {
                         var tmp = arr[j];
                         arr[j] = arr[j - 1];
@@ -52,7 +52,7 @@ namespace ExercisesLesson51
                     {
                         arr[i] = int.Parse(elements[i]);
                     }
-                    SortDESC(arr); // gọi phương thức sắp xếp
+                    Sort(arr); // gọi phương thức sắp xếp
                     Console.WriteLine($"Test {test}:");
                     ShowElements(arr);
                 }

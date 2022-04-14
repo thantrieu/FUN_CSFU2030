@@ -17,7 +17,7 @@ namespace ExercisesLesson51
             {
                 if (IsSymmetryNumber(arr[i]))
                 {
-                    Console.Write($"({i}, {arr[i]}) ");
+                    Console.Write($"{arr[i]} ");
                 }
             }
             Console.WriteLine(); // in xuong dong
@@ -27,13 +27,13 @@ namespace ExercisesLesson51
         // phương thức kiểm tra số thuận nghịch
         static bool IsSymmetryNumber(int n)
         {
-            if(n < 10)
-            {
-                return false;
-            }
-            if(n < 0)
+            if (n < 0)
             {
                 n = -n;
+            }
+            if (n < 10)
+            {
+                return false;
             }
             int rev = 0;
             int m = n;
