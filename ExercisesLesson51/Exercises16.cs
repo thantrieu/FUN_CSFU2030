@@ -45,7 +45,6 @@ namespace ExercisesLesson51
             int t = int.Parse(Console.ReadLine());
             for (int test = 1; test <= t; test++)
             {
-                // đọc vào số n, x và n phần tử mảng
                 var elements = Console.ReadLine().Split(' ');
                 var n = elements.Length;
                 int[] arr = new int[n];

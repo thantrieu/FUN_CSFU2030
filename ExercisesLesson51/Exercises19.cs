@@ -53,7 +53,7 @@ namespace ExercisesLesson51
             int t = int.Parse(Console.ReadLine());
             for (int test = 1; test <= t; test++)
             {
-                // đọc vào số n, x và n phần tử mảng
+                // đọc vào 2 mảng str1, str2 và tiến hành trộn
                 var str1 = GetArrayElements();
                 var str2 = GetArrayElements();
                 var arr = Merge(str1, str2);

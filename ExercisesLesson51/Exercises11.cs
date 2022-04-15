@@ -29,7 +29,6 @@ namespace ExercisesLesson51
             int t = int.Parse(Console.ReadLine());
             for (int test = 1; test <= t; test++)
             {
-                // đọc vào số n, x và n phần tử mảng
                 int n = int.Parse(Console.ReadLine());
                 var elements = Console.ReadLine().Split(' ');
                 if (n > 0)
