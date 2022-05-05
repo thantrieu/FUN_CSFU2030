@@ -1,96 +1,38 @@
-﻿///<summary>
-///<author>Branium Academy</author>
-///<seealso cref="Trang chủ" href="https://braniumacademy.net"/>
-///<version>2022.04.26</version>
-///</summary>
-
-using System;
+﻿using System;
 using System.Text;
 
-namespace ExercisesLesson103
+namespace Chapter8
 {
-    class Exercises2
+    class Lesson87
     {
-        // khai báo delegate tìm giá trị lớn nhất trong mảng các số nguyên
-        delegate T FindMaxDelegate<T>(T[] arr) where T : IComparable<T>;
-
-        // tìm số nguyên lớn nhất trong mảng
-        static int MaxInArrayOfInt(int[] arr)
-        {
-            if (arr.Length == 0)
-            {
-                throw new ArgumentException("Mảng truyền vào rỗng");
-            }
-            int max = arr[0];
-            for (int i = 1; i < arr.Length; i++)
-            {
-                if (arr[i] > max)
-                {
-                    max = arr[i];
-                }
-            }
-            return max;
-        }
-
-        // tìm số thực lớn nhất trong mảng
-        static double MaxInArrayOfDouble(double[] arr)
-        {
-            if (arr.Length == 0)
-            {
-                throw new ArgumentException("Mảng truyền vào rỗng");
-            }
-            double max = arr[0];
-            for (int i = 1; i < arr.Length; i++)
-            {
-                if (arr[i] > max)
-                {
-                    max = arr[i];
-                }
-            }
-            return max;
-        }
-
-        // tìm từ đứng cuối bảng chữ cái
-        static string MaxWord(string[] arr)
-        {
-            if (arr.Length == 0)
-            {
-                throw new ArgumentException("Mảng truyền vào rỗng");
-            }
-            string word = arr[0];
-            for (int i = 1; i < arr.Length; i++)
-            {
-                if (arr[i].CompareTo(word) > 0)
-                {
-                    word = arr[i];
-                }
-            }
-            return word;
-        }
-
         static void Main()
         {
-            // cho phép hiển thị tiếng Việt
+            // cho hiển thị tiếng Việt
             Console.OutputEncoding = Encoding.UTF8;
 
-            // khai báo các biến delegate
-            FindMaxDelegate<int> findMaxInt = MaxInArrayOfInt;
-            FindMaxDelegate<double> findMaxDouble = MaxInArrayOfDouble;
-            FindMaxDelegate<string> findMaxString = MaxWord;
+            var dateFormat = "dd/MM/yyyy"; // định dạng ngày tháng
+            var timeFormat = "HH:mm:ss"; // định dạng giờ
+            var dateTimeFormat = "MMMM dd, yyyy HH:mm:ss"; // cả ngày giờ
+            var format = "dd-MM-yyy hh:mm:ss tt"; // cả ngày và giờ
+            // các string chứa thời gian cần chuyển sang đối tượng date time
+            var dateString = "27/04/2009";
+            var fullDateTimeString = "January 16, 2025 15:34:26";
 
-            // mảng các số nguyên
-            int[] ages = new int[] { 1, 2, 3, 4, 5, 6, 7, 20, 35, 68, 100, 10, 17, 29, 9 };
-            Console.WriteLine($"Giá trị lớn nhất trong mảng các số nguyên: {findMaxInt(ages)}");
+            DateTime now = DateTime.Now; // lấy ngày giờ hiện tại
+            Console.WriteLine($"Giờ hiện tại: {now.ToString(timeFormat)}"); // lấy phần giờ của đối tượng
+            Console.WriteLine($"Ngày hiện tại: {now.ToString(dateFormat)}"); // lấy phần ngày
+            Console.WriteLine($"Ngày và giờ hiện tại: {now.ToString(dateTimeFormat)}"); // định dạng theo yêu cầu
+            Console.WriteLine($"Ngày và giờ hiện tại: {now.ToString(format)}"); // định dạng theo yêu cầu
 
-            // mảng các số thực
-            double[] gpas = new double[] { 1.58, 3.65, 2.54, 3.17, 3.12, 3.28, 3.98, 3.51, 2.39, 3.48 };
-            Console.WriteLine($"Giá trị lớn nhất trong các đầu điểm: {findMaxDouble(gpas)}");
+            // chuyển đổi string sang đối tượng DateTime với định dạng cho trước
+            DateTime birthDate = DateTime.ParseExact(dateString, dateFormat, null);
+            Console.WriteLine("Sinh nhật của tôi: " + birthDate.ToString(dateFormat));
 
-            // mảng các từ nhập vào từ bàn phím
-            Console.WriteLine("Nhập các từ cách nhau bởi dấu cách: ");
-            var words = Console.ReadLine()
-                .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            Console.WriteLine($"Từ đứng cuối bảng chữ cái trong câu: {findMaxString(words)}");
+            var otherDateTime = DateTime.ParseExact(fullDateTimeString, dateTimeFormat, null);
+            Console.WriteLine("Ngày đầy đủ: " + otherDateTime.ToLongDateString());
+            Console.WriteLine("Ngày giờ tự định dạng: " + otherDateTime.ToString(dateTimeFormat));
+            Console.WriteLine("Ngày tự định dạng: " + otherDateTime.ToString(dateFormat));
+            Console.WriteLine("Giờ tự định dạng: " + otherDateTime.ToString(timeFormat));
         }
     }
 }
