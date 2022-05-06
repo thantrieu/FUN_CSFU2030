@@ -36,15 +36,19 @@ namespace ExercisesLesson68
                 {
                     case 1:
                         var emp = CreateEmployee();
-                        if(emp != null)
+                        if (emp != null)
                         {
                             employees[numOfEmployee++] = emp;
                         }
                         break;
                     case 2:
-                        if(numOfEmployee > 0)
+                        if (numOfEmployee > 0)
                         {
                             ShowEmployee(employees);
+                        }
+                        else
+                        {
+                            Console.WriteLine("==> Danh sách nhân viên rỗng <==");
                         }
                         break;
                     case 3:
@@ -52,25 +56,35 @@ namespace ExercisesLesson68
                         {
                             CalculateSalary(employees);
                         }
+                        else
+                        {
+                            Console.WriteLine("==> Danh sách nhân viên rỗng <==");
+                        }
                         break;
                     case 4:
                         if (numOfEmployee > 0)
                         {
                             int comparer(Employee a, Employee b)
                             {
-                                if(a == null && b == null)
+                                if (a == null && b == null)
                                 {
                                     return 0;
-                                } else if(a == null && b != null)
+                                }
+                                else if (a == null && b != null)
                                 {
                                     return -1;
-                                } else if(a != null && b == null)
+                                }
+                                else if (a != null && b == null)
                                 {
                                     return 1;
                                 }
                                 return (int)(b.ReceivedSalary - a.ReceivedSalary);
                             };
                             Array.Sort(employees, comparer);
+                        }
+                        else
+                        {
+                            Console.WriteLine("==> Danh sách nhân viên rỗng <==");
                         }
                         break;
                     case 5:
@@ -94,6 +108,10 @@ namespace ExercisesLesson68
                             };
                             Array.Sort(employees, comparer);
                         }
+                        else
+                        {
+                            Console.WriteLine("==> Danh sách nhân viên rỗng <==");
+                        }
                         break;
                     case 6:
                         if (numOfEmployee > 0)
@@ -101,11 +119,15 @@ namespace ExercisesLesson68
                             Console.WriteLine("Nhập mã nhân viên cần tìm: ");
                             var id = Console.ReadLine();
                             var result = FindById(employees, id);
-                            if(result != null)
+                            if (result != null)
                             {
                                 Console.WriteLine("==> Thông tin nhân viên cần tìm: <==");
-                                ShowEmployee(new Employee[] {result});
+                                ShowEmployee(new Employee[] { result });
                             }
+                        }
+                        else
+                        {
+                            Console.WriteLine("==> Danh sách nhân viên rỗng <==");
                         }
                         break;
                     case 7:
@@ -116,13 +138,18 @@ namespace ExercisesLesson68
                             Console.WriteLine("Nhập mức lương mới: ");
                             var salary = long.Parse(Console.ReadLine());
                             var result = UpdateSalary(employees, id, salary);
-                            if(result)
+                            if (result)
                             {
                                 Console.WriteLine("==> Cập nhật thành công! <==");
-                            } else
+                            }
+                            else
                             {
                                 Console.WriteLine("==> Cập nhật thất bại. Nhân viên cần update không tồn tại. <==");
                             }
+                        }
+                        else
+                        {
+                            Console.WriteLine("==> Danh sách nhân viên rỗng <==");
                         }
                         break;
                     case 8:
@@ -134,11 +161,16 @@ namespace ExercisesLesson68
                             if (result)
                             {
                                 Console.WriteLine("==> Xóa thành công! <==");
+                                numOfEmployee--;
                             }
                             else
                             {
                                 Console.WriteLine("==> Xóa thất bại. Nhân viên cần xóa không tồn tại. <==");
                             }
+                        }
+                        else
+                        {
+                            Console.WriteLine("==> Danh sách nhân viên rỗng <==");
                         }
                         break;
                     case 9:
@@ -174,7 +206,7 @@ namespace ExercisesLesson68
         {
             for (int i = 0; i < employees.Length; i++)
             {
-                if(employees[i] != null && employees[i].EmpId.CompareTo(id) == 0)
+                if (employees[i] != null && employees[i].EmpId.CompareTo(id) == 0)
                 {
                     employees[i].Salary = salary;
                     return true;
@@ -190,7 +222,7 @@ namespace ExercisesLesson68
         {
             foreach (var item in employees)
             {
-                if(item.EmpId.CompareTo(id) == 0)
+                if (item != null && item.EmpId.CompareTo(id) == 0)
                 {
                     return item;
                 }
@@ -203,7 +235,7 @@ namespace ExercisesLesson68
         {
             for (int i = 0; i < employees.Length; i++)
             {
-                if(employees[i] != null)
+                if (employees[i] != null)
                 {
                     employees[i].CalculateSalary();
                 }
