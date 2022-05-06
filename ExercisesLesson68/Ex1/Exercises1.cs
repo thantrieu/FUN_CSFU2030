@@ -35,21 +35,113 @@ namespace ExercisesLesson68
                 switch (choice)
                 {
                     case 1:
-                        
+                        var emp = CreateEmployee();
+                        if(emp != null)
+                        {
+                            employees[numOfEmployee++] = emp;
+                        }
                         break;
                     case 2:
+                        if(numOfEmployee > 0)
+                        {
+                            ShowEmployee(employees);
+                        }
                         break;
                     case 3:
+                        if (numOfEmployee > 0)
+                        {
+                            CalculateSalary(employees);
+                        }
                         break;
                     case 4:
+                        if (numOfEmployee > 0)
+                        {
+                            int comparer(Employee a, Employee b)
+                            {
+                                if(a == null && b == null)
+                                {
+                                    return 0;
+                                } else if(a == null && b != null)
+                                {
+                                    return -1;
+                                } else if(a != null && b == null)
+                                {
+                                    return 1;
+                                }
+                                return (int)(b.ReceivedSalary - a.ReceivedSalary);
+                            };
+                            Array.Sort(employees, comparer);
+                        }
                         break;
                     case 5:
+                        if (numOfEmployee > 0)
+                        {
+                            int comparer(Employee a, Employee b)
+                            {
+                                if (a == null && b == null)
+                                {
+                                    return 0;
+                                }
+                                else if (a == null && b != null)
+                                {
+                                    return -1;
+                                }
+                                else if (a != null && b == null)
+                                {
+                                    return 1;
+                                }
+                                return (b.WorkingDay > a.WorkingDay) ? 1 : (b.WorkingDay == a.WorkingDay) ? 0 : -1;
+                            };
+                            Array.Sort(employees, comparer);
+                        }
                         break;
                     case 6:
+                        if (numOfEmployee > 0)
+                        {
+                            Console.WriteLine("Nhập mã nhân viên cần tìm: ");
+                            var id = Console.ReadLine();
+                            var result = FindById(employees, id);
+                            if(result != null)
+                            {
+                                Console.WriteLine("==> Thông tin nhân viên cần tìm: <==");
+                                ShowEmployee(new Employee[] {result});
+                            }
+                        }
                         break;
                     case 7:
+                        if (numOfEmployee > 0)
+                        {
+                            Console.WriteLine("Nhập mã nhân viên cần cập nhật lương: ");
+                            var id = Console.ReadLine();
+                            Console.WriteLine("Nhập mức lương mới: ");
+                            var salary = long.Parse(Console.ReadLine());
+                            var result = UpdateSalary(employees, id, salary);
+                            if(result)
+                            {
+                                Console.WriteLine("==> Cập nhật thành công! <==");
+                            } else
+                            {
+                                Console.WriteLine("==> Cập nhật thất bại. Nhân viên cần update không tồn tại. <==");
+                            }
+                        }
                         break;
                     case 8:
+                        if (numOfEmployee > 0)
+                        {
+                            Console.WriteLine("Nhập mã nhân viên cần xóa: ");
+                            var id = Console.ReadLine();
+                            var result = RemoveById(employees, id);
+                            if (result)
+                            {
+                                Console.WriteLine("==> Xóa thành công! <==");
+                            }
+                            else
+                            {
+                                Console.WriteLine("==> Xóa thất bại. Nhân viên cần xóa không tồn tại. <==");
+                            }
+                        }
+                        break;
+                    case 9:
                         Console.WriteLine("==> Cảm ơn quý khách đã sử dụng dịch vụ! <==");
                         break;
                     default:
@@ -58,8 +150,153 @@ namespace ExercisesLesson68
                 }
             } while (choice != 9);
         }
+
+        private static bool RemoveById(Employee[] employees, string id)
+        {
+            for (int i = 0; i < employees.Length; i++)
+            {
+                if (employees[i] != null && employees[i].EmpId.CompareTo(id) == 0)
+                {
+                    // chuyển các nhân viên phía phải của nhân viên bị xóa sang trái 1 vị trí
+                    // để danh sách nhân viên liền mạch không null
+                    for (int j = i; j < employees.Length - 1; j++)
+                    {
+                        employees[j] = employees[j + 1];
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // phương thức cập nhật lương cho nhân viên và trả về kết quả cập nhật
+        private static bool UpdateSalary(Employee[] employees, string id, long salary)
+        {
+            for (int i = 0; i < employees.Length; i++)
+            {
+                if(employees[i] != null && employees[i].EmpId.CompareTo(id) == 0)
+                {
+                    employees[i].Salary = salary;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // tìm nhân viên theo mã nhân viên cho trước và trả về kết quả tìm kiếm
+        // vì mỗi nhân viên chỉ có một mã nên kết quả trả về là 1 đối tượng đơn hoặc null
+        // nếu không tìm thấy
+        private static Employee FindById(Employee[] employees, string id)
+        {
+            foreach (var item in employees)
+            {
+                if(item.EmpId.CompareTo(id) == 0)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        // phương thức tính lương nhân viên
+        private static void CalculateSalary(Employee[] employees)
+        {
+            for (int i = 0; i < employees.Length; i++)
+            {
+                if(employees[i] != null)
+                {
+                    employees[i].CalculateSalary();
+                }
+            }
+        }
+
+        // phương thức tạo thông tin nhân viên
+        private static Employee CreateEmployee()
+        {
+            Console.WriteLine("==> Chọn loại nhân viên cần thêm: ");
+            Console.WriteLine("1. Nhân viên thông thường.");
+            Console.WriteLine("2. Nhân viên quản lý.");
+            Console.WriteLine("3. Giám đốc.");
+            int option = int.Parse(Console.ReadLine());
+            if (option == 1)
+            {
+                return CreateEmpInfo();
+            }
+            else if (option == 2)
+            {
+                return CreateLeaderInfo();
+            }
+            else if (option == 3)
+            {
+                return CreateDirectorInfo();
+            }
+            return null; // nếu không chọn cụ thể thì trả về null
+        }
+
+        private static Employee CreateDirectorInfo()
+        {
+            var emp = CreateEmpInfo();
+            Console.WriteLine("Chức vụ: ");
+            var role = Console.ReadLine();
+            Console.WriteLine("Ngày nhận chức(vd 22/10/2025): ");
+            var date = Console.ReadLine();
+            var startDate = DateTime.ParseExact(date, "dd/MM/yyyy", null);
+            Console.WriteLine("Hệ số tiền thưởng(% lương): ");
+            var bonusRate = float.Parse(Console.ReadLine()) / 100;
+            return new Director(emp.EmpId, emp.FullName,
+                emp.PhoneNumber, emp.Salary, emp.WorkingDay, bonusRate, role, startDate);
+        }
+
+        private static Employee CreateLeaderInfo()
+        {
+            var emp = CreateEmpInfo();
+            Console.WriteLine("Chức vụ: ");
+            var role = Console.ReadLine();
+            Console.WriteLine("Hệ số tiền thưởng(% lương): ");
+            var bonusRate = float.Parse(Console.ReadLine()) / 100;
+            return new Manager(emp.EmpId, emp.FullName,
+                emp.PhoneNumber, emp.Salary, emp.WorkingDay, bonusRate, role);
+        }
+
+        private static Employee CreateEmpInfo()
+        {
+            Employee employee = new Employee();
+            Console.WriteLine("Họ và tên: ");
+            employee.FullName = Console.ReadLine();
+            Console.WriteLine("Số điện thoại: ");
+            employee.PhoneNumber = Console.ReadLine();
+            Console.WriteLine("Mức lương: ");
+            employee.Salary = long.Parse(Console.ReadLine());
+            Console.WriteLine("Số ngày làm việc trong tháng: ");
+            employee.WorkingDay = float.Parse(Console.ReadLine());
+            return employee;
+        }
+
+        // phương thức hiển thị thông tin nhân viên
+        private static void ShowEmployee(Employee[] employees)
+        {
+            var titleId = "Mã NV";
+            var titleName = "Họ và tên";
+            var titlePhone = "Số điện thoại";
+            var titleSalary = "Mức lương";
+            var titleWorkingDay = "Số ngày làm việc";
+            var titleReceivedSalary = "Lương thực lĩnh";
+            Console.WriteLine($"{titleId,-10:d}{titleName,-25:d}" +
+                $"{titlePhone,-15:d}{titleSalary,-15:d}{titleWorkingDay,-20:d}" +
+                $"{titleReceivedSalary,-20:d}");
+            foreach (var item in employees)
+            {
+                if (item != null)
+                {
+                    Console.WriteLine($"{item.EmpId,-10:d}{item.FullName,-25:d}" +
+                        $"{item.PhoneNumber,-15:d}{item.Salary,-15:d}{item.WorkingDay + "",-20:d}" +
+                        $"{item.ReceivedSalary,-20:d}");
+                }
+            }
+        }
     }
 
+    // lớp mô tả thông tin nhân viên
     class Employee
     {
         private static int autoId = 1000;
