@@ -17,6 +17,7 @@ namespace ExercisesLesson68
             Console.OutputEncoding = Encoding.UTF8;
             Account[] accounts = new Account[100];
             int numOfAccount = 0; // số lượng tài khoản
+            CreateFakeAccounts(accounts, ref numOfAccount);
             int choice;
             do
             {
@@ -40,7 +41,7 @@ namespace ExercisesLesson68
                         Console.WriteLine("2. Tạo tài khoản tiết kiệm.");
                         var option = int.Parse(Console.ReadLine());
                         var newAcc = CreateAccount(option);
-                        if(newAcc != null)
+                        if (newAcc != null)
                         {
                             accounts[numOfAccount++] = newAcc;
                         }
@@ -116,7 +117,35 @@ namespace ExercisesLesson68
                     case 7:
                         if (numOfAccount > 0)
                         {
-
+                            int comparer(Account a, Account b)
+                            {
+                                if (a == null && b == null)
+                                {
+                                    return 0;
+                                }
+                                else if (a == null && b != null)
+                                {
+                                    return 1;
+                                }
+                                else if (a != null && b == null)
+                                {
+                                    return -1;
+                                }
+                                var diff = b.Balance - a.Balance;
+                                if (diff < 0)
+                                {
+                                    return -1;
+                                }
+                                else if (diff > 0)
+                                {
+                                    return 1;
+                                }
+                                else
+                                {
+                                    return 0;
+                                }
+                            }
+                            Array.Sort(accounts, comparer);
                         }
                         else
                         {
@@ -126,7 +155,18 @@ namespace ExercisesLesson68
                     case 8:
                         if (numOfAccount > 0)
                         {
-
+                            Console.WriteLine("Nhập 4 số cuối của TK cần tìm: ");
+                            var key = int.Parse(Console.ReadLine());
+                            var result = FindByLast4Digits(accounts, key);
+                            if (result[0] == null)
+                            {
+                                Console.WriteLine("==> Không có kết quả tìm kiếm. <==");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"==> Các tài khoản có 4 số cuối là {key}: <==");
+                                ShowAccountList(result);
+                            }
                         }
                         else
                         {
@@ -143,10 +183,90 @@ namespace ExercisesLesson68
             } while (choice != 9);
         }
 
-        private static void BankTransfer(Account[] accounts, long accNumber, 
+        private static void CreateFakeAccounts(Account[] accounts, ref int numOfAccount)
+        {
+            var expired = DateTime.ParseExact("15/08/2028", "dd/MM/yyyy", null);
+            accounts[numOfAccount++] = new SavingAccount(0, "TRAN TRUNG DUNG", 12500000, 
+                                        "Vietcombank", expired, 123456, 0, 0, 12, 5.5, 0);
+            accounts[numOfAccount++] = new SavingAccount(0, "NGUYEN VIET DUY", 18500000,
+                                        "Vietcombank", expired, 123456, 0, 0, 6, 5.0, 0);
+            accounts[numOfAccount++] = new SavingAccount(0, "LE CONG TUAN", 162500000,
+                                        "Vietcombank", expired, 123456, 0, 0, 12, 5.5, 0);
+            accounts[numOfAccount++] = new SavingAccount(0, "MA THANH TUYEN", 62500000,
+                                        "Vietcombank", expired, 123456, 0, 0, 15, 5.65, 0);
+            accounts[numOfAccount++] = new SavingAccount(0, "HO HOANG ANH", 99500000,
+                                        "Vietcombank", expired, 123456, 0, 0, 24, 6, 0);
+        }
+
+        // tìm tài khoản theo 4 số cuối
+        // quy ước các tài khoản được thêm vào theo thứ tự từ đầu đến cuối nên
+        // các vị trí trống chưa thêm tài khoản sẽ null và ở phần cuối danh sách
+        private static Account[] FindByLast4Digits(Account[] accounts, int last4Digits)
+        {
+            var key = $"{last4Digits}";
+            Account[] result = new Account[accounts.Length];
+            int numOfResult = 0;
+            foreach (var item in accounts)
+            {
+                if(item == null) // nếu gặp tài khoản null
+                {
+                    break; // kết thúc việc xét duyệt
+                }
+                var accNumberString = $"{item.AccNumber}";
+                if (accNumberString.EndsWith(key))
+                {
+                    result[numOfResult++] = item;
+                }
+            }
+            return result;
+        }
+
+        // tìm tài khoản theo số tài khoản
+        private static Account FindByAccountNumber(Account[] accounts, long accNumber)
+        {
+            foreach (var item in accounts)
+            {
+                if (item != null && item.AccNumber == accNumber)
+                {
+                    return item; // nếu tìm thấy, trả về phần tử tìm được
+                }
+            }
+            return null; // nếu không tìm thấy, trả về null
+        }
+
+        // chuyển khoản từ tài khoản A sang tài khoản B
+        private static void BankTransfer(Account[] accounts, long accNumber,
             long destAccNumber, int pin, long amount)
         {
-            
+            var srcAcc = FindByAccountNumber(accounts, accNumber);
+            var destAcc = FindByAccountNumber(accounts, destAccNumber);
+            if (srcAcc != null && destAcc != null && pin == srcAcc.Pin)
+            {
+                var transferResult = srcAcc.Transfer(destAcc, amount);
+                if (transferResult > 0)
+                {
+                    Console.WriteLine("==> Chuyển tiền thành công. <==");
+                }
+                else
+                {
+                    Console.WriteLine("==> Chuyển tiền thất bại. <==");
+                }
+            }
+            else
+            {
+                if (pin != srcAcc.Pin)
+                {
+                    Console.WriteLine("==> Mã PIN không đúng. <==");
+                }
+                if (destAcc == null)
+                {
+                    Console.WriteLine("==> Tài khoản đích không tồn tại. <==");
+                }
+                else if (srcAcc == null)
+                {
+                    Console.WriteLine("==> Tài khoản nguồn không tồn tại. <==");
+                }
+            }
         }
 
         // phương thức rút tiền khỏi tài khoản
@@ -157,24 +277,26 @@ namespace ExercisesLesson68
             bool isFound = false;
             for (int i = 0; i < accounts.Length; i++)
             {
-                if(accounts[i] == null)
+                if (accounts[i] == null)
                 {
                     break;
                 }
-                if(accounts[i].AccNumber == accNumber)
+                if (accounts[i].AccNumber == accNumber)
                 {
                     isFound = true;
-                    if(pin == accounts[i].Pin)
+                    if (pin == accounts[i].Pin)
                     {
                         var withdrawResult = accounts[i].Withdraw(bank, amount);
-                        if(withdrawResult > 0)
+                        if (withdrawResult > 0)
                         {
                             Console.WriteLine("==> Rút tiền thành công. <==");
-                        } else
+                        }
+                        else
                         {
                             Console.WriteLine("==> Rút tiền thất bại. <==");
                         }
-                    } else
+                    }
+                    else
                     {
                         Console.WriteLine("==> Mã PIN không đúng. <==");
                     }
@@ -195,18 +317,19 @@ namespace ExercisesLesson68
             var isFound = false;
             for (int i = 0; i < accounts.Length; i++)
             {
-                if(accounts[i] == null)
+                if (accounts[i] == null)
                 {
                     break;
                 }
-                if(accounts[i].AccNumber == accNumber)
+                if (accounts[i].AccNumber == accNumber)
                 {
                     var result = accounts[i].Deposit(amount);
                     isFound = true;
-                    if(result > 0)
+                    if (result > 0)
                     {
                         Console.WriteLine("==> Nạp tiền thành công. <==");
-                    } else
+                    }
+                    else
                     {
                         Console.WriteLine("==> Nạp tiền thất bại. <==");
                     }
@@ -224,18 +347,18 @@ namespace ExercisesLesson68
             var isFound = false;
             foreach (var item in accounts)
             {
-                if(item == null)
+                if (item == null)
                 {
                     break;
                 }
-                if(item.AccNumber == accNumber)
+                if (item.AccNumber == accNumber)
                 {
                     item.CheckBallance();
                     isFound = true;
                     break;
                 }
             }
-            if(!isFound)
+            if (!isFound)
             {
                 Console.WriteLine("==> Không tìm thấy tài khoản cần kiểm tra. <==");
             }
@@ -255,10 +378,11 @@ namespace ExercisesLesson68
             Console.WriteLine("Mã PIN: ");
             var pin = int.Parse(Console.ReadLine());
             Account account = new Account(0, owner, balance, bank, expiredDate, pin, 0, 0);
-            if(choice == 1)
+            if (choice == 1)
             {
                 return CreateCheckingAccount(account);
-            } else if(choice == 2)
+            }
+            else if (choice == 2)
             {
                 return CreateSavingAccount(account);
             }
@@ -272,8 +396,8 @@ namespace ExercisesLesson68
             var term = int.Parse(Console.ReadLine());
             Console.WriteLine("Lãi suất: ");
             var interestRate = double.Parse(Console.ReadLine());
-            return new SavingAccount(account.AccNumber, account.Owner, account.Balance, 
-                account.BankName, account.ExpiredDate, account.Pin, 
+            return new SavingAccount(account.AccNumber, account.Owner, account.Balance,
+                account.BankName, account.ExpiredDate, account.Pin,
                 account.TotalDailyTransaction, account.TotalDailyTransfer, term, interestRate, 0);
         }
 
@@ -330,7 +454,7 @@ namespace ExercisesLesson68
         public DateTime ExpiredDate { get; set; }   // ngày hết hiệu lực
         public int Pin { get; set; }                // mã PIN
         public long TotalDailyTransfer { get; set; }     // số tiền đã chuyển trong 1 ngày
-        public long TotalDailyTransaction { get; set; } // tổng tiền đã giao dịch trong ngày
+        public long TotalDailyTransaction { get; set; } // tổng tiền đã giao dịch trong ngày gồm cả tiền gửi vào, rút ra, chuyển đi
 
         // các constructor
         public Account() { }
@@ -369,6 +493,7 @@ namespace ExercisesLesson68
             if (amount > 0)
             {
                 Balance += amount;
+                TotalDailyTransaction += amount;
                 return amount;
             }
             else
@@ -513,7 +638,7 @@ namespace ExercisesLesson68
                 base.Withdraw(bank, amount);
                 // phí rút tiền
                 long widthdrawFee = InterbankWithdrawFee;
-                if(bank.CompareTo(BankName) == 0)
+                if (bank.CompareTo(BankName) == 0)
                 {
                     widthdrawFee = IntrabankWithdrawFee;
                 }
