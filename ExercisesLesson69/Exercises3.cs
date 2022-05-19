@@ -222,11 +222,13 @@ namespace ExercisesLesson69
             } while (choice != 17);
         }
 
+        // nhập thông tin bảng điểm cho các sinh viên trong lớp
         private static void FillTranscript(Course[] courses)
         {
 
         }
 
+        // hiển thị danh sách sinh viên ra màn hình
         private static void ShowStudents(Student[] students)
         {
             var id = "Mã SV";
@@ -249,6 +251,7 @@ namespace ExercisesLesson69
             }
         }
 
+        // hiển thị danh sách môn học ra màn hình
         private static void ShowSubjects(Subject[] subjects)
         {
             var id = "Mã môn học";
@@ -269,6 +272,7 @@ namespace ExercisesLesson69
             }
         }
 
+        // hiển thị danh sách bảng điểm của từng lớp học ra màn hình
         private static void ShowTranscript(Course[] courses)
         {
             var id = "Mã SV";
@@ -308,6 +312,7 @@ namespace ExercisesLesson69
             }
         }
 
+        // sắp xếp danh sách sinh viên theo tên a-z
         private static void SortStudentsByName(Student[] students)
         {
             int comparer(Student s1, Student s2)
@@ -340,6 +345,7 @@ namespace ExercisesLesson69
             Array.Sort(students, comparer);
         }
 
+        // tìm sinh viên theo tên
         private static object FindStudentById(Student[] students)
         {
             Console.WriteLine("Nhập mã sinh viên cần tìm: ");
@@ -358,6 +364,7 @@ namespace ExercisesLesson69
             return null;
         }
 
+        // xóa sinh viên theo tên
         private static void RemoveStudentById(Student[] students, ref int numOfStudent)
         {
             var isFound = false;
@@ -392,36 +399,43 @@ namespace ExercisesLesson69
             }
         }
 
+        // sắp xếp bảng điểm
         private static void SortTranscripts(Course[] courses)
         {
             throw new NotImplementedException();
         }
 
+        // liệt kê danh sách sinh viên giỏi của từng lớp
         private static void GoodStudents(Course[] courses)
         {
             throw new NotImplementedException();
         }
 
+        // liệt kê danh sách sinh viên trượt môn
         private static void FailedStudents(Course[] courses)
         {
             throw new NotImplementedException();
         }
 
+        // cập nhật điểm cho sinh viên
         private static void UpdateGrade(Course[] courses)
         {
             throw new NotImplementedException();
         }
 
+        // tìm sinh viên theo điểm TB
         private static Transcript[] FindStudentByGpa(Course[] courses)
         {
             throw new NotImplementedException();
         }
 
+        // xóa bảng điểm theo mã bảng điểm cho trước
         private static void RemoveTranscript(Course[] courses)
         {
             throw new NotImplementedException();
         }
 
+        // tạo mới đối tượng sinh viên
         private static Student CreateStudent()
         {
             Console.WriteLine("Họ và tên: ");
@@ -435,6 +449,7 @@ namespace ExercisesLesson69
             return new Student(fullName, address, age, null, major);
         }
 
+        // tạo mới đối tượng môn học
         private static Subject CreateSubject()
         {
             Console.WriteLine("Tên môn học: ");
@@ -444,6 +459,7 @@ namespace ExercisesLesson69
             return new Subject(0, subjectName, credit);
         }
 
+        // tạo mới đối tượng lớp học phần
         private static Course CreateCourse(Subject[] subjects)
         {
             Console.WriteLine("Mã môn học: ");
@@ -460,6 +476,7 @@ namespace ExercisesLesson69
             return new Course(0, subject, teacher, numOfStudent);
         }
 
+        // tìm môn học theo mã môn học cho trước
         private static Subject FindSubjectById(Subject[] subjects, int id)
         {
             foreach (var item in subjects)
@@ -476,6 +493,7 @@ namespace ExercisesLesson69
             return null;
         }
 
+        // tạo danh sách khóa học fake
         private static void CreateFakeCourses(Course[] courses, ref int numOfCourse, Subject[] subjects)
         {
             courses[numOfCourse++] = new Course(0, subjects[0], "Ngô Quang Đại", 50);
@@ -488,6 +506,7 @@ namespace ExercisesLesson69
             courses[numOfCourse++] = new Course(0, subjects[1], "Trần Văn Vinh", 50);
         }
 
+        // tạo danh sách môn học fake
         private static void CreateFakeSubjects(Subject[] subjects, ref int numOfSubject)
         {
             subjects[numOfSubject++] = new Subject(0, "C++", 3);
@@ -501,6 +520,7 @@ namespace ExercisesLesson69
             subjects[numOfSubject++] = new Subject(0, "JavaScript", 3);
         }
 
+        // tạo danh sách sinh viên fake
         private static void CreateFakeStudents(Student[] students, ref int numOfStudent)
         {
             students[numOfStudent++] = new Student("Trần Anh Tuấn", "Hà Nội", 21, null, "CNTT");
