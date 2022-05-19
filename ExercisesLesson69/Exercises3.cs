@@ -21,8 +21,8 @@ namespace ExercisesLesson69
             int numOfStudent = 0; // số lượng các sinh viên
             int numOfSubject = 0; // số lượng các môn học
             CreateFakeStudents(students, ref numOfStudent);
-            CreateFakeSubjects(students, ref numOfSubject);
-            CreateFakeCourses(students, ref numOfCourse);
+            CreateFakeSubjects(subjects, ref numOfSubject);
+            CreateFakeCourses(courses, ref numOfCourse, subjects);
 
             int choice;
             do
@@ -224,37 +224,172 @@ namespace ExercisesLesson69
 
         private static void FillTranscript(Course[] courses)
         {
-            throw new NotImplementedException();
+
         }
 
         private static void ShowStudents(Student[] students)
         {
-            throw new NotImplementedException();
+            var id = "Mã SV";
+            var name = "Họ và tên";
+            var age = "Tuổi";
+            var address = "Địa chỉ";
+            var major = "Chuyên ngành";
+            Console.WriteLine($"{id,-15:d}{name,-25:d}{age,-15:d}{address,-25:d}{major:-20:d}");
+            foreach (var student in students)
+            {
+                if (student != null)
+                {
+                    Console.WriteLine($"{student.StudentId,-15:d}{student.FullName,-25:d}" +
+                        $"{student.Age,-15:d}{student.Address,-25:d}{student.Major:-20:d}");
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
         private static void ShowSubjects(Subject[] subjects)
         {
-            throw new NotImplementedException();
+            var id = "Mã môn học";
+            var name = "Tên môn học";
+            var credit = "Số tín chỉ";
+            Console.WriteLine($"{id,-15:d}{name,-25:d}{credit,-15:d}");
+            foreach (var subject in subjects)
+            {
+                if (subject != null)
+                {
+                    Console.WriteLine($"{subject.SubjectId,-15:d}{subject.SubjectName,-25:d}" +
+                        $"{subject.Credit,-15:d}");
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
         private static void ShowTranscript(Course[] courses)
         {
-            throw new NotImplementedException();
+            var id = "Mã SV";
+            var name = "Họ tên sinh viên";
+            var grade1 = "Điểm hệ số 1";
+            var grade2 = "Điểm hệ số 2";
+            var grade3 = "Điểm hệ số 3";
+            var gpa = "Điểm TB";
+            var dashedLine = "-----------------------------------------------" +
+                             "-----------------------------------------------";
+            Console.WriteLine(dashedLine);
+            foreach (var item in courses)
+            {
+                if (item != null)
+                {
+                    Console.WriteLine($"Giáo viên: {item.Teacher}");
+                    Console.WriteLine($"Môn học: {item.Subject.SubjectName}");
+                    Console.WriteLine($"Số sinh viên: {item.NumberOfStudent}");
+                    Console.WriteLine($"{id,-15:d}{name,-25:d}{grade1,-15:d}" +
+                        $"{grade2,-15:d}{grade3,-15:d}{gpa,-15:d}");
+                    foreach (var tran in item.Transcripts)
+                    {
+                        if (tran == null)
+                        {
+                            break;
+                        }
+                        Console.WriteLine($"{tran.Student.StudentId,-15:d}{tran.Student.FullName,-25:d}" +
+                            $"{tran.GradeLevel1,-15:d}" +
+                            $"{tran.GradeLevel2,-15:d}{tran.GradeLevel3,-15:d}{tran.Gpa,-15:d}");
+                    }
+                    Console.WriteLine(dashedLine);
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
         private static void SortStudentsByName(Student[] students)
         {
-            throw new NotImplementedException();
+            int comparer(Student s1, Student s2)
+            {
+                if (s1 == null && s2 == null)
+                {
+                    return 0;
+                }
+                else if (s1 == null && s2 != null)
+                {
+                    return 1;
+                }
+                else if (s1 != null && s2 == null)
+                {
+                    return -1;
+                }
+                else
+                {
+                    int nameCompare = s1.FullName.FirstName.CompareTo(s2.FullName.FirstName);
+                    if (nameCompare != 0)
+                    {
+                        return nameCompare;
+                    }
+                    else
+                    {
+                        return s1.FullName.LastName.CompareTo(s2.FullName.LastName);
+                    }
+                }
+            }
+            Array.Sort(students, comparer);
         }
 
         private static object FindStudentById(Student[] students)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Nhập mã sinh viên cần tìm: ");
+            var studentId = Console.ReadLine();
+            foreach (var item in students)
+            {
+                if (item == null)
+                {
+                    return null;
+                }
+                if (item.StudentId.CompareTo(studentId) == 0)
+                {
+                    return item;
+                }
+            }
+            return null;
         }
 
         private static void RemoveStudentById(Student[] students, ref int numOfStudent)
         {
-            throw new NotImplementedException();
+            var isFound = false;
+            Console.WriteLine("Nhập mã sinh viên cần xóa: ");
+            var studentId = Console.ReadLine();
+            for (int i = 0; i < numOfStudent; i++)
+            {
+                var student = students[i];
+                if (student.StudentId.CompareTo(studentId) == 0)
+                {
+                    isFound = true;
+                    Console.WriteLine("==> Bạn có chắc chắn muốn xóa không?(Y/N) ");
+                    var ans = Console.ReadLine()[0];
+                    if (ans == 'Y' || ans == 'y')
+                    {
+                        for (int j = i; j < numOfStudent; j++)
+                        {
+                            students[j] = students[j + 1];
+                        }
+                        numOfStudent--; // giảm số phần tử trong mảng sinh viên đi 1 đơn vị
+                        Console.WriteLine($"==> Sinh viên mã \"{studentId}\" đã được xóa khỏi danh sách. <==");
+                    }
+                    else
+                    {
+                        Console.WriteLine("==> Hành động xóa sinh viên bị hủy bỏ. <==");
+                    }
+                }
+            }
+            if (!isFound)
+            {
+                Console.WriteLine("==> Không tìm thấy sinh viên cần xóa. <==");
+            }
         }
 
         private static void SortTranscripts(Course[] courses)
@@ -289,32 +424,97 @@ namespace ExercisesLesson69
 
         private static Student CreateStudent()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Họ và tên: ");
+            var fullName = Console.ReadLine();
+            Console.WriteLine("Địa chỉ: ");
+            var address = Console.ReadLine();
+            Console.WriteLine("Tuổi: ");
+            int age = int.Parse(Console.ReadLine());
+            Console.WriteLine("Chuyên ngành: ");
+            var major = Console.ReadLine();
+            return new Student(fullName, address, age, null, major);
         }
 
         private static Subject CreateSubject()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Tên môn học: ");
+            var subjectName = Console.ReadLine();
+            Console.WriteLine("Số tín chỉ: ");
+            var credit = int.Parse(Console.ReadLine());
+            return new Subject(0, subjectName, credit);
         }
 
         private static Course CreateCourse(Subject[] subjects)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Mã môn học: ");
+            var subjectId = int.Parse(Console.ReadLine());
+            var subject = FindSubjectById(subjects, subjectId);
+            if (subject == null)
+            {
+                return null;
+            }
+            Console.WriteLine("Số lượng sinh viên: ");
+            var numOfStudent = int.Parse(Console.ReadLine());
+            Console.WriteLine("Người dạy: ");
+            var teacher = Console.ReadLine();
+            return new Course(0, subject, teacher, numOfStudent);
         }
 
-        private static void CreateFakeCourses(Student[] students, ref int numOfCourse)
+        private static Subject FindSubjectById(Subject[] subjects, int id)
         {
-            throw new NotImplementedException();
+            foreach (var item in subjects)
+            {
+                if (item == null)
+                {
+                    return null;
+                }
+                if (item.SubjectId == id)
+                {
+                    return item;
+                }
+            }
+            return null;
         }
 
-        private static void CreateFakeSubjects(Student[] students, ref int numOfSubject)
+        private static void CreateFakeCourses(Course[] courses, ref int numOfCourse, Subject[] subjects)
         {
-            throw new NotImplementedException();
+            courses[numOfCourse++] = new Course(0, subjects[0], "Ngô Quang Đại", 50);
+            courses[numOfCourse++] = new Course(0, subjects[2], "Ngô Quang Đại", 50);
+            courses[numOfCourse++] = new Course(0, subjects[1], "Lê Thu Hà", 40);
+            courses[numOfCourse++] = new Course(0, subjects[2], "Hoàng Việt Cường", 50);
+            courses[numOfCourse++] = new Course(0, subjects[2], "Ma Quốc Chuyên", 45);
+            courses[numOfCourse++] = new Course(0, subjects[3], "Nguyễn Văn Vĩnh", 40);
+            courses[numOfCourse++] = new Course(0, subjects[1], "Trần Văn Vinh", 60);
+            courses[numOfCourse++] = new Course(0, subjects[1], "Trần Văn Vinh", 50);
+        }
+
+        private static void CreateFakeSubjects(Subject[] subjects, ref int numOfSubject)
+        {
+            subjects[numOfSubject++] = new Subject(0, "C++", 3);
+            subjects[numOfSubject++] = new Subject(0, "C#", 4);
+            subjects[numOfSubject++] = new Subject(0, "Java", 4);
+            subjects[numOfSubject++] = new Subject(0, "Python", 4);
+            subjects[numOfSubject++] = new Subject(0, "Data struct", 3);
+            subjects[numOfSubject++] = new Subject(0, "Android", 5);
+            subjects[numOfSubject++] = new Subject(0, "Kotlin", 3);
+            subjects[numOfSubject++] = new Subject(0, "SQL", 3);
+            subjects[numOfSubject++] = new Subject(0, "JavaScript", 3);
         }
 
         private static void CreateFakeStudents(Student[] students, ref int numOfStudent)
         {
-            throw new NotImplementedException();
+            students[numOfStudent++] = new Student("Trần Anh Tuấn", "Hà Nội", 21, null, "CNTT");
+            students[numOfStudent++] = new Student("Ngô Nhật Nam", "Lào Cai", 20, null, "CNTT");
+            students[numOfStudent++] = new Student("Hoàng Trọng Nhân", "Đà Nẵng", 21, null, "CNTT");
+            students[numOfStudent++] = new Student("Lê Quốc Cường", "Hồ Chí Minh", 20, null, "CNTT");
+            students[numOfStudent++] = new Student("Nguyễn Thị Thoa", "Quảng Nam", 20, null, "CNTT");
+            students[numOfStudent++] = new Student("Lại Viết Hòa", "Bình Dương", 21, null, "CNTT");
+            students[numOfStudent++] = new Student("Ma Thùy Linh", "Hà Nội", 21, null, "CNTT");
+            students[numOfStudent++] = new Student("Ngô Công Chất", "Nghệ An", 20, null, "CNTT");
+            students[numOfStudent++] = new Student("Lê Công Tuấn", "Thanh Hóa", 21, null, "CNTT");
+            students[numOfStudent++] = new Student("Trần Văn Bách", "Hà Nam", 20, null, "CNTT");
+            students[numOfStudent++] = new Student("Nguyễn Hữu Thắng", "Hà Nội", 22, null, "CNTT");
+            students[numOfStudent++] = new Student("Nguyễn Thu Hà", "Quảng Ninh", 20, null, "CNTT");
         }
     }
 
@@ -388,7 +588,8 @@ namespace ExercisesLesson69
             StudentId = studentId == null ? $"ST{autoId++}" : studentId;
         }
 
-        public Student(string fullName, string address, int age, string studentId, string major) : this(studentId)
+        public Student(string fullName, string address,
+            int age, string studentId, string major) : this(studentId)
         {
             FullName = new FullName(fullName);
             Major = major;
@@ -456,10 +657,7 @@ namespace ExercisesLesson69
         public float GradeLevel3 { get; set; }
         public float Gpa { get; set; }
 
-        public Transcript()
-        {
-
-        }
+        public Transcript() { }
 
         public Transcript(int id)
         {
