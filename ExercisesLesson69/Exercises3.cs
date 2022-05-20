@@ -73,7 +73,7 @@ namespace ExercisesLesson69
                     case 4:
                         if (numOfCourse > 0)
                         {
-                            FillTranscript(courses);
+                            FillTranscript(courses, students);
                         }
                         else
                         {
@@ -126,7 +126,8 @@ namespace ExercisesLesson69
                             var student = FindStudentById(students);
                             if (student != null)
                             {
-
+                                Console.WriteLine("==> Sinh viên cần tìm: <==");
+                                ShowStudents(new Student[] { student });
                             }
                             else
                             {
@@ -195,6 +196,14 @@ namespace ExercisesLesson69
                             if (result[0] != null)
                             {
                                 Console.WriteLine("==> Kết quả tìm kiếm: <==");
+                                foreach (var item in result)
+                                {
+                                    if (item != null)
+                                    {
+                                        Console.WriteLine($"{item.Student.StudentId,-15:d}" +
+                                            $"{item.Student.FullName,-25:d}{item.Gpa + "",-15:d}");
+                                    }
+                                }
                             }
                         }
                         else
@@ -223,9 +232,57 @@ namespace ExercisesLesson69
         }
 
         // nhập thông tin bảng điểm cho các sinh viên trong lớp
-        private static void FillTranscript(Course[] courses)
+        private static void FillTranscript(Course[] courses, Student[] students)
         {
+            Console.WriteLine("Mã lớp cần tìm: ");
+            var courseId = int.Parse(Console.ReadLine());
+            var course = FindCourseById(courses, courseId);
+            if (course != null)
+            {
+                var student = FindStudentById(students);
+                if (IsStudentExistedInCourse(course, student))
+                {
+                    Console.WriteLine("==> Lỗi. Bảng điểm của sinh viên này đã tồn tại. Hãy thử sinh viên khác. <==");
+                } 
+                else if (student != null && course.NumberOfTranscript < course.NumberOfStudent)
+                {
+                    var transcripts = course.Transcripts;
+                    Console.WriteLine("Nhập điểm hệ số 1: ");
+                    var grade1 = float.Parse(Console.ReadLine());
+                    Console.WriteLine("Nhập điểm hệ số 2: ");
+                    var grade2 = float.Parse(Console.ReadLine());
+                    Console.WriteLine("Nhập điểm hệ số 3: ");
+                    var grade3 = float.Parse(Console.ReadLine());
+                    transcripts[course.NumberOfTranscript] = new Transcript(0, student, grade1, grade2, grade3, 0);
+                    transcripts[course.NumberOfTranscript].CalculateGpa();
+                    course.NumberOfTranscript++;
+                }
+                else if (student == null)
+                {
+                    Console.WriteLine("==> Không tìm thấy sinh viên cần nhập điểm. <==");
+                }
+                else
+                {
+                    Console.WriteLine("==> Danh sách bảng điểm và sinh viên đã đầy <==");
+                }
+            }
+            else
+            {
+                Console.WriteLine("==> Không tồn tại lớp học cần tìm. <==");
+            }
+        }
 
+        // tìm xem bảng điểm của sinh viên x có trong lớp hiện tại chưa
+        private static bool IsStudentExistedInCourse(Course course, Student student)
+        {
+            foreach (var item in course.Transcripts)
+            {
+                if(item != null && item.Student.StudentId.CompareTo(student.StudentId) == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         // hiển thị danh sách sinh viên ra màn hình
@@ -276,6 +333,7 @@ namespace ExercisesLesson69
         private static void ShowTranscript(Course[] courses)
         {
             var id = "Mã SV";
+            var transId = "Mã bảng điểm";
             var name = "Họ tên sinh viên";
             var grade1 = "Điểm hệ số 1";
             var grade2 = "Điểm hệ số 2";
@@ -288,20 +346,25 @@ namespace ExercisesLesson69
             {
                 if (item != null)
                 {
+                    Console.WriteLine($"Mã lớp: {item.CourseId}");
                     Console.WriteLine($"Giáo viên: {item.Teacher}");
                     Console.WriteLine($"Môn học: {item.Subject.SubjectName}");
                     Console.WriteLine($"Số sinh viên: {item.NumberOfStudent}");
-                    Console.WriteLine($"{id,-15:d}{name,-25:d}{grade1,-15:d}" +
-                        $"{grade2,-15:d}{grade3,-15:d}{gpa,-15:d}");
-                    foreach (var tran in item.Transcripts)
+                    if(item.NumberOfTranscript > 0)
                     {
-                        if (tran == null)
+                        Console.WriteLine($"{transId,-15:d}{id,-15:d}{name,-25:d}{grade1,-15:d}" +
+                        $"{grade2,-15:d}{grade3,-15:d}{gpa,-15:d}");
+                        foreach (var tran in item.Transcripts)
                         {
-                            break;
+                            if (tran == null)
+                            {
+                                break;
+                            }
+                            Console.WriteLine($"{tran.TranscriptId,-15:d}{tran.Student.StudentId,-15:d}" +
+                                $"{tran.Student.FullName,-25:d}" +
+                                $"{tran.GradeLevel1 + "",-15:d}" + $"{tran.GradeLevel2 + "",-15:d}" +
+                                $"{tran.GradeLevel3 + "",-15:d}{tran.Gpa + "",-15:d}");
                         }
-                        Console.WriteLine($"{tran.Student.StudentId,-15:d}{tran.Student.FullName,-25:d}" +
-                            $"{tran.GradeLevel1,-15:d}" +
-                            $"{tran.GradeLevel2,-15:d}{tran.GradeLevel3,-15:d}{tran.Gpa,-15:d}");
                     }
                     Console.WriteLine(dashedLine);
                 }
@@ -346,10 +409,10 @@ namespace ExercisesLesson69
         }
 
         // tìm sinh viên theo tên
-        private static object FindStudentById(Student[] students)
+        private static Student FindStudentById(Student[] students)
         {
             Console.WriteLine("Nhập mã sinh viên cần tìm: ");
-            var studentId = Console.ReadLine();
+            var studentId = Console.ReadLine().ToUpper();
             foreach (var item in students)
             {
                 if (item == null)
@@ -399,40 +462,254 @@ namespace ExercisesLesson69
             }
         }
 
-        // sắp xếp bảng điểm
+        // sắp xếp bảng điểm theo điểm TB giảm dần
         private static void SortTranscripts(Course[] courses)
         {
-            throw new NotImplementedException();
+            int comparer(Transcript s1, Transcript s2)
+            {
+                if (s1 == null && s2 == null)
+                {
+                    return 0;
+                }
+                else if (s1 == null && s2 != null)
+                {
+                    return 1;
+                }
+                else if (s1 != null && s2 == null)
+                {
+                    return -1;
+                }
+                else
+                {
+                    if (s1.Gpa > s2.Gpa)
+                    {
+                        return -1;
+                    }
+                    else if (s1.Gpa == s2.Gpa)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+            }
+            for (int i = 0; i < courses.Length; i++)
+            {
+                if (courses[i] != null)
+                {
+                    Array.Sort(courses[i].Transcripts, comparer);
+                }
+            }
         }
 
         // liệt kê danh sách sinh viên giỏi của từng lớp
         private static void GoodStudents(Course[] courses)
         {
-            throw new NotImplementedException();
+            bool isFound = false;
+            Console.WriteLine("==> Các sinh viên giỏi của từng lớp: ");
+            foreach (var item in courses)
+            {
+                if (item != null && item.NumberOfTranscript > 0)
+                {
+                    Console.WriteLine("Mã lớp: " + item.CourseId);
+                    Console.WriteLine("Môn học: " + item.Subject.SubjectName);
+                    Console.WriteLine("Người dạy: " + item.Teacher);
+                    var id = "Mã sinh viên";
+                    var name = "Họ và tên";
+                    var gpa = "Điểm TB";
+                    Console.WriteLine($"{id,-15:d}{name,-25:d}{gpa,-15:d}");
+                    foreach (var tran in item.Transcripts)
+                    {
+                        if (tran != null && tran.Gpa >= 8.0f)
+                        {
+                            isFound = true;
+                            Console.WriteLine($"{tran.Student.StudentId,-15:d}" +
+                                $"{tran.Student.FullName,-25:d}{tran.Gpa + "",-15:d}");
+                        }
+                    }
+                    if (!isFound)
+                    {
+                        Console.WriteLine("==> Không có sinh viên giỏi. <==");
+                    }
+                }
+            }
+            if(!isFound)
+            {
+                Console.WriteLine("==> Không có kết quả. <==");
+            }
         }
 
         // liệt kê danh sách sinh viên trượt môn
         private static void FailedStudents(Course[] courses)
         {
-            throw new NotImplementedException();
+            bool isFound = false;
+            Console.WriteLine("==> Các sinh viên trượt môn của từng lớp: ");
+            foreach (var item in courses)
+            {
+                if (item != null && item.NumberOfTranscript > 0)
+                {
+                    Console.WriteLine("Mã lớp: " + item.CourseId);
+                    Console.WriteLine("Môn học: " + item.Subject.SubjectName);
+                    Console.WriteLine("Người dạy: " + item.Teacher);
+                    var id = "Mã sinh viên";
+                    var name = "Họ và tên";
+                    var gpa = "Điểm TB";
+                    Console.WriteLine($"{id,-15:d}{name,-25:d}{gpa,-15:d}");
+                    foreach (var tran in item.Transcripts)
+                    {
+                        if (tran != null && tran.Gpa < 4.0f)
+                        {
+                            isFound = true;
+                            Console.WriteLine($"{tran.Student.StudentId,-15:d}" +
+                                $"{tran.Student.FullName,-25:d}{tran.Gpa + "",-15:d}");
+                        }
+                    }
+                    if(!isFound)
+                    {
+                        Console.WriteLine("==> Không có sinh viên trượt môn. <==");
+                    }
+                }
+            }
+            if (!isFound)
+            {
+                Console.WriteLine("==> Không có kết quả. <==");
+            }
         }
 
         // cập nhật điểm cho sinh viên
         private static void UpdateGrade(Course[] courses)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Mã lớp: ");
+            var courseId = int.Parse(Console.ReadLine());
+            var course = FindCourseById(courses, courseId);
+            if (course != null)
+            {
+                Console.WriteLine("Mã sinh viên cần sửa điểm: ");
+                var studentId = Console.ReadLine().ToUpper();
+                var isFound = false;
+                for (int i = 0; i < course.Transcripts.Length; i++)
+                {
+                    if (course.Transcripts[i] == null)
+                    {
+                        break;
+                    }
+                    if (course.Transcripts[i].Student.StudentId.CompareTo(studentId) == 0)
+                    {
+                        isFound = true;
+                        Console.WriteLine("Nhập điểm hệ số 1: ");
+                        var grade1 = float.Parse(Console.ReadLine());
+                        Console.WriteLine("Nhập điểm hệ số 2: ");
+                        var grade2 = float.Parse(Console.ReadLine());
+                        Console.WriteLine("Nhập điểm hệ số 3: ");
+                        var grade3 = float.Parse(Console.ReadLine());
+                        course.Transcripts[i].GradeLevel1 = grade1;
+                        course.Transcripts[i].GradeLevel2 = grade2;
+                        course.Transcripts[i].GradeLevel3 = grade3;
+                        course.Transcripts[i].CalculateGpa();
+                        Console.WriteLine("==> Cập nhật thành công! <==");
+                    }
+                }
+                if (!isFound)
+                {
+                    Console.WriteLine("==> Không tồn tại sinh viên cần cập nhật điểm. <==");
+                }
+            }
+            else
+            {
+                Console.WriteLine("==> Không tồn tại lớp học cần tìm. <==");
+            }
+        }
+
+        // tìm lớp học theo mã lớp
+        private static Course FindCourseById(Course[] courses, int courseId)
+        {
+            foreach (var item in courses)
+            {
+                if (item != null && item.CourseId == courseId)
+                {
+                    return item;
+                }
+            }
+            return null;
         }
 
         // tìm sinh viên theo điểm TB
         private static Transcript[] FindStudentByGpa(Course[] courses)
         {
-            throw new NotImplementedException();
+            Transcript[] result = new Transcript[courses.Length];
+            Console.WriteLine("Mã lớp cần tìm: ");
+            var courseId = int.Parse(Console.ReadLine());
+            var course = FindCourseById(courses, courseId);
+            if (course != null)
+            {
+                var numOfResult = 0;
+                Console.WriteLine("Nhập mức điểm cần tìm: ");
+                var gpa = float.Parse(Console.ReadLine());
+                var transcripts = course.Transcripts;
+                foreach (var item in transcripts)
+                {
+                    if (item != null && item.Gpa >= gpa)
+                    {
+                        result[numOfResult++] = item;
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("==> Không tồn tại lớp học cần tìm. <==");
+            }
+            return result;
         }
 
         // xóa bảng điểm theo mã bảng điểm cho trước
         private static void RemoveTranscript(Course[] courses)
         {
-            throw new NotImplementedException();
+            bool isFound = false;
+            Console.WriteLine("Mã lớp cần tìm: ");
+            var courseId = int.Parse(Console.ReadLine());
+            var course = FindCourseById(courses, courseId);
+            if (course != null)
+            {
+                Console.WriteLine("Nhập mã bảng điểm cần xóa: ");
+                var transcriptId = int.Parse(Console.ReadLine());
+                var transcripts = course.Transcripts;
+                for (var i = 0; i < transcripts.Length; i++)
+                {
+                    var item = transcripts[i];
+                    if (item != null && item.TranscriptId == transcriptId)
+                    {
+                        isFound = true;
+                        Console.WriteLine("Bạn có chắc muốn xóa không?(Y/N):");
+                        var ans = Console.ReadLine()[0];
+                        if (ans == 'y' || ans == 'Y')
+                        {
+                            // chuyển các phần tử bên phải phần tử bị xóa sang trái 1 đơn vị
+                            for (int j = i; j < transcripts.Length - 1; j++)
+                            {
+                                transcripts[j] = transcripts[j + 1];
+                            }
+                            // xóa phần tử cuối khác null khỏi danh sách bảng điểm
+                            transcripts[course.NumberOfTranscript - 1] = null;
+                            course.NumberOfTranscript--; // giảm số bảng điểm hiện có đi 1
+                            Console.WriteLine("==> Xóa thành công. <==");
+                        }
+                        else
+                        {
+                            Console.WriteLine("==> Hành động xóa đã được hủy bỏ. <==");
+                        }
+                    }
+                }
+                if (!isFound)
+                {
+                    Console.WriteLine("==> Không tìm thấy bảng điểm cần xóa. <==");
+                }
+            }
+            else
+            {
+                Console.WriteLine("==> Không tồn tại lớp học cần tìm. <==");
+            }
         }
 
         // tạo mới đối tượng sinh viên
@@ -643,11 +920,12 @@ namespace ExercisesLesson69
     // lớp mô tả thông tin lớp học phần
     class Course
     {
-        private int autoId = 10000;
+        private static int autoId = 10000;
         public int CourseId { get; set; }
         public Subject Subject { get; set; }
         public string Teacher { get; set; } // người dạy
         public int NumberOfStudent { get; set; }
+        public int NumberOfTranscript { get; set; }
         public Transcript[] Transcripts { get; set; }
 
         public Course() { }
@@ -663,6 +941,7 @@ namespace ExercisesLesson69
             Subject = subject;
             NumberOfStudent = numberOfStudent;
             Transcripts = new Transcript[numberOfStudent];
+            NumberOfTranscript = 0;
         }
     }
 
