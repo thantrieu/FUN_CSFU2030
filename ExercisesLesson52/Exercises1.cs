@@ -19,13 +19,13 @@ namespace ExercisesLesson52
             if (m > 0 && n > 0)
             {
                 int[,] matrix = new int[m, n];
-                int index = 0;
+                var elements = Console.ReadLine().Split(' ');
+                //int index = 0;
                 for (int i = 0; i < m; i++)
-                {
-                    var elements = Console.ReadLine().Split(' ');
+                {                   
                     for (int j = 0; j < n; j++)
                     {
-                        matrix[i, j] = int.Parse(elements[j]);
+                        matrix[i, j] = int.Parse(elements[i * n + j]);
                     }
                 }
                 return matrix;
