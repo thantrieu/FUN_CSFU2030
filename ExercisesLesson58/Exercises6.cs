@@ -351,7 +351,6 @@ namespace ExercisesLesson58
                 if (statIndex != -1)
                 {
                     statistic[statIndex].amount++;
-                    break;
                 }
                 else
                 {
